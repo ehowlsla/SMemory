@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/parallaxContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:id="@+id/image"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/bg0" />
+
+        <com.myspringway.secretmemory.library.SecretTextView
+            android:id="@+id/title"
+            android:layout_marginTop="30dp"
+            android:padding="30dp"
+            android:gravity="center"
+            android:text="@string/secret_memory_title"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/image_bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitEnd"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/bottom_left"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginBottom="100dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="left"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:id="@+id/content_left"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="right"
+            android:layout_marginBottom="100dp"
+            android:layout_marginRight="20dp"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:id="@+id/content_right"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:id="@+id/intro_is_already_singup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_above="@+id/login"
+            android:text="@string/intro_is_already_singup"
+            />
+
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:autoLink="all"
+            android:layout_marginBottom="150dp"
+            android:layout_alignParentBottom="true"
+            android:text="@string/login_u"
+            />
+
+
+
+        <LinearLayout
+            android:id="@+id/join_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentBottom="true"
+            android:alpha="0"
+            android:layout_marginBottom="40dp">
+
+            <TextView
+                android:id="@+id/join_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:background="@drawable/green_click"
+                android:alpha="0.8"
+                android:gravity="center"
+                android:text="@string/join_email"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/white"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:alpha="0.8"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:alpha="0.8"
+                    android:text="@string/intro_is_already_singup"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="20dp"
+                    android:autoLink="all"
+                    android:textStyle="bold"
+                    android:id="@+id/login2"
+                    android:text="@string/login_u"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</RelativeLayout>

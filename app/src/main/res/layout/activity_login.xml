@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_join"/>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/shadow_top"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:shadowColor="@color/black"
+        android:shadowDx="1.0"
+        android:shadowDy="1.0"
+        android:shadowRadius="1.0"
+        android:textColor="@color/white"
+        android:text="@string/hello"
+        />
+
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/title">
+
+        <com.myspringway.secretmemory.library.ClearableEditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:inputType="textEmailAddress"
+            android:hint="@string/join_email_hint"
+            android:textColorHint="@color/white_20"
+            android:textColor="@color/white"
+            android:background="@color/white_20"
+            android:layout_below="@+id/info"/>
+
+        <com.myspringway.secretmemory.library.ClearableEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:inputType="textPassword"
+            android:hint="@string/join_password_title"
+            android:textColorHint="@color/white_20"
+            android:textColor="@color/white"
+            android:background="@color/white_20"
+            android:layout_below="@id/info"/>
+
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="@string/login"
+            android:background="@drawable/green_click"/>
+
+
+    </LinearLayout>
+    <View
+        android:id="@+id/seperate"
+        android:layout_below="@+id/top_layout"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:background="@color/white_20"
+        android:layout_height="1dp"/>
+
+    <TextView
+        android:id="@+id/facebook_login"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/seperate"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="@string/facebook_login"
+        android:background="@color/facebook_blue"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/join"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="@string/join_n" />
+
+        <TextView
+            android:id="@+id/find"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:enabled="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="@string/find_password" />
+
+    </LinearLayout>
+
+</RelativeLayout>

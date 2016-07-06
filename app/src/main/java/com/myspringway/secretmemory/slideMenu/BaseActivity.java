@@ -1,0 +1,65 @@
+package com.myspringway.secretmemory.slideMenu;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+
+import com.myspringway.secretmemory.R;
+import com.myspringway.secretmemory.fragment.MenuFragment;
+
+
+public class BaseActivity extends SlidingFragmentActivity {
+
+    private int mTitleRes;
+//    protected ListFragment mFrag;
+    protected MenuFragment mFrag;
+
+    public BaseActivity(int titleRes) {
+        this.mTitleRes = titleRes;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setTitle(mTitleRes);
+
+        // set the Behind View
+        setBehindContentView(R.layout.menu_frame);
+        if (savedInstanceState == null) {
+            FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
+            mFrag = new MenuFragment();
+            t.replace(R.id.menu_frame, mFrag);
+            t.commit();
+        } else {
+            mFrag = (MenuFragment) this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
+        }
+
+        // customize the SlidingMenu
+        SlidingMenu sm = getSlidingMenu();
+        sm.setShadowWidthRes(R.dimen.shadow_width);
+        sm.setShadowDrawable(R.drawable.shadow);
+        sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        sm.setFadeDegree(0.35f);
+//        sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+
+    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                toggle();
+//                return true;
+//            case R.id.github:
+//                Util.goToGitHub(this);
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getSupportMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="shadow_width">1dp</dimen>
+    <dimen name="slidingmenu_offset">60dp</dimen>
+    <item name="selected_view" type="id"/>
+    <string name="title_bar_slide">Sliding Title Bar</string>
+
+</resources>

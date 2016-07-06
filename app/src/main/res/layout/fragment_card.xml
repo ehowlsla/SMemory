@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/root_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <com.myspringway.secretmemory.cardstack.SwipeFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:id="@+id/swipeLayout"
+        android:orientation="vertical">
+
+        <com.myspringway.secretmemory.cardstack.SwipeDeck
+            android:id="@+id/swipe_deck"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            swipedeck:paddingStart="0dp"
+            swipedeck:paddingEnd="0dp"
+            swipedeck:card_spacing="0dp"
+            swipedeck:max_visible="3"
+            swipedeck:render_above="true"
+            swipedeck:rotation_degrees="15"
+            swipedeck:opacity_end="0.5"/>
+
+    </com.myspringway.secretmemory.cardstack.SwipeFrameLayout>
+
+
+    <ImageView
+        android:id="@+id/write"
+        android:src="@drawable/write"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+
+
+</RelativeLayout>
+
+
+

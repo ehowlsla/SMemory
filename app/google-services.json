@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "571722771611",
+    "firebase_url": "https://secretmemory-b8162.firebaseio.com",
+    "project_id": "secretmemory-b8162",
+    "storage_bucket": "secretmemory-b8162.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571722771611:android:6c73e5a8fea88485",
+        "android_client_info": {
+          "package_name": "com.myspringway.secretmemory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571722771611-rk7fnhoj6cpmq7806pbjbmqsk5g086bh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY-AkvD4l5vxZyNob_IYbaukcbnHY7dSg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
