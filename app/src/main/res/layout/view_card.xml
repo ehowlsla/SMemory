@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:text="Sample Text"
                 android:layout_centerInParent="true"
-                android:textColor="@color/white"
+                android:textColor="#000000"
                 android:shadowColor="#FF464646"
                 android:shadowDx="1.0"
                 android:shadowDy="1.0"

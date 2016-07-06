@@ -17,6 +17,7 @@ import com.firebase.client.Firebase;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,11 +51,12 @@ public class CardFragment extends Fragment {
     public static final String EXTRA_POST_KEY = "post_key";
 
     private List<Post> data;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private DatabaseReference mPostReference;
     private String mPostkey;
 
     private List<String> testData;
-    private DatabaseReference mDataRef;
     private SwipeDeckAdapter adapter;
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
 //    private int i;
@@ -79,47 +81,56 @@ public class CardFragment extends Fragment {
 
         data = new ArrayList<>();
 
-        if (data.size() == 0) {
-            // TODO: 데이터가 없을 때 로직 추가, 아래는 테스트용 더미 데이터
-            data.add(new Post(getEmail(), "imgUri", "bodyText"));
-            data.add(new Post(getEmail(), "imgUri", "bodyText"));
-            data.add(new Post(getEmail(), "imgUri", "bodyText"));
-        }
+        // TODO: 데이터가 없을 때 로직 추가, 아래는 테스트용 더미 데이터
+//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
+//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
+//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
+//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
+//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
+//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
 
-        Query queryRef = mPostReference.orderByChild("posts");
-        queryRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Post newPost = dataSnapshot.getValue(Post.class);
-                data.add(new Post(newPost.author, newPost.pos_imgData, newPost.pos_content));
-            }
+        Query query = mPostReference.child("posts");
+        query.addChildEventListener(
+                new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Post post = dataSnapshot.getValue(Post.class);
+                        int pos_num = post.pos_num;
+                        data.add(pos_num, post);
+                        adapter.notifyDataSetChanged();
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        Post post = dataSnapshot.getValue(Post.class);
+                        data.add(post);
+                        adapter.notifyDataSetChanged();
+                    }
 
-            }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    }
 
-            }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
 
-            }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    }
+                }
+        );
 
-            }
-        });
         adapter = new SwipeDeckAdapter(data, getContext(), getLayoutInflater(savedInstanceState));
         swipe_deck.setAdapter(adapter);
 
         swipe_deck.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
+
                 Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
             }
 
@@ -146,38 +157,6 @@ public class CardFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
-    }
-
-    private void onLikeClicked(DatabaseReference postRef) {
-        postRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                Post p = mutableData.getValue(Post.class);
-                if (p == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                if (p.likes.containsKey(getUid())) {
-                    p.numOfLike = --p.numOfLike;
-                    p.likes.remove(getUid());
-                } else {
-                    p.numOfLike = ++p.numOfLike;
-                    p.likes.put(getUid(), true);
-                }
-
-                mutableData.setValue(p);
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-            }
-        });
     }
 
     public void resetCardPosition() {

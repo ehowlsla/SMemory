@@ -3,13 +3,22 @@ package com.myspringway.secretmemory.fragment.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.activity.CommentActivity;
 import com.myspringway.secretmemory.model.Post;
@@ -17,10 +26,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.OnClick;
+
 /**
  * Created by legab on 2016-06-30.
  */
 public class SwipeDeckAdapter extends BaseAdapter {
+
+    private static final String TAG = "SwipeDeckAdapter";
 
     private List<Post> data;
     private Context context;
@@ -48,7 +61,7 @@ public class SwipeDeckAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         View v = convertView;
         if (v == null) {
@@ -57,26 +70,80 @@ public class SwipeDeckAdapter extends BaseAdapter {
             v.setPadding(0, 0, 0, 0);
         }
 
+        final DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference();
+
+        Log.d(TAG, ""+data.size());
+
         ImageView imageView = (ImageView) v.findViewById(R.id.offer_img);
         TextView textView = (TextView) v.findViewById(R.id.body_text);
+        ImageView likeBtn = (ImageView) v.findViewById(R.id.like_btn);
 
-        Picasso.with(context).load(data.get(position).pos_imgData)
-                .error(R.drawable.bg0)
-                .fit()
-                .centerCrop()
-                .into(imageView);
+        // TODO: 이미지 데이터가 NULL일 경우 ERROR -> 해결 필요
+        // TODO: 이미지 URL이 너무 길어 로딩 불가능 -> 해결 필요
+        if (data.get(position).pos_imgData != null && data.get(position).equals("")) {
+            Picasso.with(context)
+                    .load(data.get(position).pos_imgData)
+                    .error(R.drawable.bg0)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
+        } else {
+            Picasso.with(context)
+                    .load(R.drawable.bg1)
+                    .error(R.drawable.bg0)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
+        }
+
 
         textView.setText(data.get(position).pos_content);
+
+        likeBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dataRef.runTransaction(new Transaction.Handler() {
+                            @Override
+                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                Post p = mutableData.getValue(Post.class);
+                                if (p == null) {
+                                    return Transaction.success(mutableData);
+                                }
+
+                                if (p.likes.containsKey(getUid())) {
+                                    p.numOfLike = --p.numOfLike;
+                                    p.likes.remove(getUid());
+                                } else {
+                                    p.numOfLike = ++p.numOfLike;
+                                    p.likes.put(getUid(), true);
+                                }
+
+                                mutableData.setValue(p);
+                                return Transaction.success(mutableData);
+                            }
+
+                            @Override
+                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+                            }
+                        });
+                    }
+                }
+        );
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent i = new Intent(v.getContext(), CommentActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    v.getContext().startActivity(i);
-
+                Intent i = new Intent(v.getContext(), CommentActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                v.getContext().startActivity(i);
             }
         });
         return v;
+    }
+
+    private String getUid() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 }

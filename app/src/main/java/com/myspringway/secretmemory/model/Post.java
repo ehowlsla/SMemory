@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class Post {
 
+    public int pos_num;
     public long pos_c_at; // created at
     public long pos_u_at; // updated at
     public String author;
@@ -30,6 +31,7 @@ public class Post {
     public Post(String author, String imgUrl, String body) {
         this.pos_c_at = System.currentTimeMillis();
         this.pos_u_at = System.currentTimeMillis();
+        this.pos_num = pos_num++;
         this.author = author;
         this.pos_imgData = imgUrl;
         this.pos_content = body;

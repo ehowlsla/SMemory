@@ -184,7 +184,7 @@ public class WriteActivity extends Activity {
     }
 
     private void copyImageToStorage(Intent data) {
-        Log.d(TAG, "copyImageToStorage:data:" + data.toString());
+        Log.d(TAG, "copyImageToStorage:data:" + data.getData().toString());
         sourceUri = data.getData();
         File origin = ImageUtils.getImageFile(getApplicationContext(), sourceUri);
         sourceUri = ImageUtils.createTempFile();
@@ -207,7 +207,7 @@ public class WriteActivity extends Activity {
 
         if (TextUtils.isEmpty(body.getText())) {
             stopLoading();
-            Toast.makeText(WriteActivity.this, getResources().getString(R.string.wirte_error_text), Toast.LENGTH_SHORT).show();
+            Toast.makeText(WriteActivity.this, getResources().getString(R.string.error_write_text_null), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -221,27 +221,27 @@ public class WriteActivity extends Activity {
                         Member member = dataSnapshot.getValue(Member.class);
                         if (member == null) {
                             Log.e(TAG, "User: " + memberId + "is unexpectedly null");
-                            Toast.makeText(WriteActivity.this, getResources().getString(R.string.wirte_error_null), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WriteActivity.this, getResources().getString(R.string.error_sign_null), Toast.LENGTH_SHORT).show();
                         } else {
                             if (mDownloadUrl == null) {
-                                Toast.makeText(WriteActivity.this, "mDownloadUrl:null", Toast.LENGTH_SHORT).show();
+                                // TODO: 사용자가 이미지를 설정하지 않은 경우 로직 추가 필요
                                 writeNewPost("", body.getText().toString());
                             } else {
                                 writeNewPost(mDownloadUrl.toString(), body.getText().toString());
                             }
-                            Log.d(TAG, "Saving Complete.");
-                            Toast.makeText(WriteActivity.this, "성공적으로 저장되었습니다.", Toast.LENGTH_SHORT).show();
-                            stopLoading();
-                            finish();
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, String.valueOf(databaseError.toException()));
+                        Log.e(TAG, "ValueEventListener:onCancelled:" + String.valueOf(databaseError.toException()));
                     }
                 }
         );
+        Log.d(TAG, "Saving Complete.");
+        stopLoading();
+        Log.d(TAG, "called finish()");
+        finish();
     }
 
     private boolean isValidTag() {
@@ -294,15 +294,14 @@ public class WriteActivity extends Activity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mDownloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
                         isImageUpload = true;
-                        Log.d(TAG, "OnSuccessListener:called.");
-                        Toast.makeText(WriteActivity.this, mDownloadUrl.toString(), Toast.LENGTH_SHORT).show();
+                        // TODO: 이미지 업로드 중 save 버튼 클릭 시 mDownloadUrl == null; 수정 필요.
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mDownloadUrl = null;
-                        Toast.makeText(WriteActivity.this, "이미지 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WriteActivity.this, getResources().getString(R.string.error_img_upload_fail), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -325,8 +324,9 @@ public class WriteActivity extends Activity {
     private void writeNewPost(String img, String body) {
         // Create new post at /user-posts/$userid/$postid
         // and at /posts/$postid simultaneously
+        Log.e(TAG, "writeNewPost Called!");
         String key = mDatabaseRef.child("posts").push().getKey();
-        Post post = new Post(mAuth.getCurrentUser().getEmail(), img, body);
+        Post post = new Post(mAuth.getCurrentUser().getEmail(), img + ".jpg", body);
         Map<String, Object> postValues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
@@ -334,6 +334,8 @@ public class WriteActivity extends Activity {
         childUpdates.put("/user-posts/" + key, postValues);
 
         mDatabaseRef.updateChildren(childUpdates);
+        Toast.makeText(WriteActivity.this, "pos_content:" + post.pos_content, Toast.LENGTH_SHORT).show();
+        Toast.makeText(WriteActivity.this, "pos_imgData:" + post.pos_imgData, Toast.LENGTH_SHORT).show();
     }
 
     public void callback() {
@@ -383,7 +385,7 @@ public class WriteActivity extends Activity {
                     intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
                     startActivityForResult(intent, GALLERY_SELECT);
                 } else {
-                    Toast.makeText(this, getResources().getString(R.string.permission_deny), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.error_permission_deny), Toast.LENGTH_SHORT).show();
                 }
         }
     }
