@@ -2,17 +2,8 @@ package com.myspringway.secretmemory.activity;
 
 import android.os.Bundle;
 
-import com.firebase.client.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.fragment.CardFragment;
-import com.myspringway.secretmemory.fragment.adapter.SwipeDeckAdapter;
-
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

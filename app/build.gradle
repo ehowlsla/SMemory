@@ -67,6 +67,7 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.7'
     compile 'org.apmem.tools:layouts:1.10@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
 
 }
 

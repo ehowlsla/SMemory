@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
-import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 
 import butterknife.ButterKnife;
 

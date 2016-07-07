@@ -85,4 +85,10 @@
         <item>내 하나님이여\n내가 이 백성을 위하여 행한 모든 일을\n기억하여 주십시오\n\n- 느 5:19 -</item>
     </string-array>
 
+    <string name="comment_edittext">댓글을 입력해주세요.</string>
+    <string name="comment_btn_upload">작성</string>
+    <string name="comment_btn_loading">전송중</string>
+    <string name="comment_btn_done">완료</string>
+    <string name="comment_btn_error">실패</string>
+
 </resources>

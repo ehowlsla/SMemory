@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,7 +56,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-import static android.Manifest.*;
+import static android.Manifest.permission;
 
 /**
  * Created by yoontaesup on 2015. 6. 16..
@@ -129,6 +128,8 @@ public class WriteActivity extends Activity {
 
         initFirebase();
         initObject();
+
+        save.setEnabled(false);
 
         dynamicTagList = new ArrayList<>();
     }
@@ -218,16 +219,15 @@ public class WriteActivity extends Activity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Member member = dataSnapshot.getValue(Member.class);
-                        if (member == null) {
-                            Log.e(TAG, "User: " + memberId + "is unexpectedly null");
-                            Toast.makeText(WriteActivity.this, getResources().getString(R.string.error_sign_null), Toast.LENGTH_SHORT).show();
+                        if (mDownloadUrl == null) {
+                            // TODO: 사용자가 이미지를 설정하지 않은 경우 로직 추가 필요
+                            writeNewPost("", body.getText().toString());
+
                         } else {
-                            if (mDownloadUrl == null) {
-                                // TODO: 사용자가 이미지를 설정하지 않은 경우 로직 추가 필요
-                                writeNewPost("", body.getText().toString());
-                            } else {
-                                writeNewPost(mDownloadUrl.toString(), body.getText().toString());
+                            writeNewPost(mDownloadUrl.toString(), body.getText().toString());
+                            stopLoading();
+                            if (isSave) {
+                                finish();
                             }
                         }
                     }
@@ -238,10 +238,6 @@ public class WriteActivity extends Activity {
                     }
                 }
         );
-        Log.d(TAG, "Saving Complete.");
-        stopLoading();
-        Log.d(TAG, "called finish()");
-        finish();
     }
 
     private boolean isValidTag() {
@@ -294,6 +290,7 @@ public class WriteActivity extends Activity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         mDownloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
                         isImageUpload = true;
+                        save.setEnabled(true);
                         // TODO: 이미지 업로드 중 save 버튼 클릭 시 mDownloadUrl == null; 수정 필요.
                     }
                 })
@@ -334,8 +331,7 @@ public class WriteActivity extends Activity {
         childUpdates.put("/user-posts/" + key, postValues);
 
         mDatabaseRef.updateChildren(childUpdates);
-        Toast.makeText(WriteActivity.this, "pos_content:" + post.pos_content, Toast.LENGTH_SHORT).show();
-        Toast.makeText(WriteActivity.this, "pos_imgData:" + post.pos_imgData, Toast.LENGTH_SHORT).show();
+        isSave = true;
     }
 
     public void callback() {

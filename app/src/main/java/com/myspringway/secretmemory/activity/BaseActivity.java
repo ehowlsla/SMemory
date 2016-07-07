@@ -3,6 +3,7 @@ package com.myspringway.secretmemory.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.fragment.MenuFragment;
 import com.myspringway.secretmemory.slideMenu.SlidingFragmentActivity;
