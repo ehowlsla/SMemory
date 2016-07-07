@@ -60,12 +60,8 @@ public class LoginActivity extends Activity {
         mDataRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        registGCM();
         email.setText(SharedPreferenceHelper.getValue(getApplicationContext(), AppConstant.EMAIL));
         password.setText(SharedPreferenceHelper.getValue(getApplicationContext(), AppConstant.PASSWORD));
-    }
-
-    private void registGCM() {
     }
 
     @OnClick(R.id.facebook_login)
@@ -75,13 +71,13 @@ public class LoginActivity extends Activity {
 
     @OnClick(R.id.login)
     void goLogin() {
-
         if (!validateForm()) { return; }
 
         startLoading();
 
         String email = this.email.getText().toString().trim();
         String password = this.password.getText().toString().trim();
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -91,7 +87,7 @@ public class LoginActivity extends Activity {
                             onAuthSuccess(task.getResult().getUser());
                             finish();
                         } else {
-                            Toast.makeText(LoginActivity.this, "아이디나 비밀번호가 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, getResources().getString(R.string.error_sign_in_wrong_info), Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -99,6 +95,7 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, e.getCause().getMessage());
+                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.error_sign_in_transmit), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -106,14 +103,14 @@ public class LoginActivity extends Activity {
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(email.getText().toString())) {
-            email.setError("이메일을 입력해주세요.");
+            email.setError(getResources().getString(R.string.error_sign_in_blank_id));
             result = false;
         } else {
             email.setError(null);
         }
 
         if (TextUtils.isEmpty(password.getText().toString())) {
-            password.setError("비밀번호를 입력해주세요.");
+            password.setError(getResources().getString(R.string.error_sign_in_blank_pw));
             result = false;
         } else {
             password.setError(null);

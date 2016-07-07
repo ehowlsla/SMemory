@@ -4,18 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.Toast;
 
-import com.firebase.client.Firebase;
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -26,20 +20,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.activity.CommentActivity;
-import com.myspringway.secretmemory.activity.MainActivity;
 import com.myspringway.secretmemory.activity.WriteActivity;
 import com.myspringway.secretmemory.cardstack.SwipeDeck;
-import com.myspringway.secretmemory.cardstack.SwipeFrameLayout;
 import com.myspringway.secretmemory.fragment.adapter.SwipeDeckAdapter;
 import com.myspringway.secretmemory.model.Post;
-import com.myspringway.secretmemory.viewholder.PostViewHolder;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,21 +40,11 @@ import butterknife.OnClick;
 public class CardFragment extends Fragment {
 
     private static final String TAG = "CardFragment";
-    public static final String EXTRA_POST_KEY = "post_key";
 
     private List<Post> data;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     private DatabaseReference mPostReference;
-    private String mPostkey;
-
-    private List<String> testData;
     private SwipeDeckAdapter adapter;
-    private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
-//    private int i;
-
-//    @BindView(R.id.frame)
-//    SwipeFlingAdapterView list;
+    private FirebaseRemoteConfig remoteConfig;
 
     @BindView(R.id.swipe_deck)
     SwipeDeck swipe_deck;
@@ -76,18 +58,11 @@ public class CardFragment extends Fragment {
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        mPostReference = FirebaseDatabase.getInstance().getReference();
-        mPostkey = mPostReference.getKey();
+        initFirebase();
 
         data = new ArrayList<>();
 
-        // TODO: 데이터가 없을 때 로직 추가, 아래는 테스트용 더미 데이터
-//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
-//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
-//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
-//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
-//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
-//        data.add(new Post(getEmail(), "imgUri", "bodyText"));
+        // TODO: 데이터가 없을 때 로직 추가
 
         Query query = mPostReference.child("posts");
         query.addChildEventListener(
@@ -95,14 +70,15 @@ public class CardFragment extends Fragment {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Post post = dataSnapshot.getValue(Post.class);
-                        int pos_num = post.pos_num;
-                        data.add(pos_num, post);
+                        onLikeClicked(mPostReference);
+                        data.add(post);
                         adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                         Post post = dataSnapshot.getValue(Post.class);
+                        onLikeClicked(mPostReference);
                         data.add(post);
                         adapter.notifyDataSetChanged();
                     }
@@ -146,12 +122,10 @@ public class CardFragment extends Fragment {
 
             @Override
             public void cardActionDown() {
-//                Log.i(TAG, "cardActionDown");
             }
 
             @Override
             public void cardActionUp() {
-//                Log.i(TAG, "cardActionUp");
             }
 
         });
@@ -159,10 +133,62 @@ public class CardFragment extends Fragment {
         return view;
     }
 
+    private void initFirebase() {
+        mPostReference = FirebaseDatabase.getInstance().getReference();
+        remoteConfig = FirebaseRemoteConfig.getInstance();
+
+        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder().setDeveloperModeEnabled(true).build();
+
+        Map<String, Object> defaultConfigMap = new HashMap<>();
+        defaultConfigMap.put("msg_length_limit", 140L);
+
+        remoteConfig.setConfigSettings(remoteConfigSettings);
+        remoteConfig.setDefaults(defaultConfigMap);
+
+        fetchConfig();
+    }
+
+    private void fetchConfig() {
+
+    }
+
     public void resetCardPosition() {
         if(swipe_deck != null) {
             swipe_deck.resetCardPosition();
         }
+    }
+
+    private void onLikeClicked(DatabaseReference postRef) {
+        postRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Post p = mutableData.getValue(Post.class);
+                if (p == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                if (p.likes.containsKey(getUid())) {
+                    // Unstar the post and remove self from stars
+                    p.numOfLike = p.numOfLike - 1;
+                    p.likes.remove(getUid());
+                } else {
+                    // Star the post and add self to stars
+                    p.numOfLike = p.numOfLike + 1;
+                    p.likes.put(getUid(), true);
+                }
+
+                // Set value and report transaction success
+                mutableData.setValue(p);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
     }
 
     @OnClick(R.id.write)
@@ -172,8 +198,8 @@ public class CardFragment extends Fragment {
         getActivity().overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
     }
 
-    private String getEmail() {
-        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        return userEmail;
+    private String getUid() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
+
 }

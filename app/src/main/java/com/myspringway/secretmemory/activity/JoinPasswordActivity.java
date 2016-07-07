@@ -60,7 +60,7 @@ public class JoinPasswordActivity extends Activity {
 
     private DatabaseReference mDataRef;
     private FirebaseAuth mAuth;
-    Firebase ref;
+    private Firebase ref;
 
 
     @Override
@@ -75,7 +75,7 @@ public class JoinPasswordActivity extends Activity {
         initObject();
     }
 
-    void initObject() {
+    private void initObject() {
         InputMethodManager im = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
 
         softKeyboard = new SoftKeyboard(root_layout, im);
@@ -168,7 +168,7 @@ public class JoinPasswordActivity extends Activity {
                             goMainActivity();
                             finish();
                         } else {
-                            Log.d(TAG, "가입 실패");
+                            Log.e(TAG, "가입 실패");
                         }
                     }
                 });

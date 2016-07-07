@@ -75,62 +75,23 @@ public class SwipeDeckAdapter extends BaseAdapter {
         Log.d(TAG, ""+data.size());
 
         ImageView imageView = (ImageView) v.findViewById(R.id.offer_img);
-        TextView textView = (TextView) v.findViewById(R.id.body_text);
+        final TextView textView = (TextView) v.findViewById(R.id.body_text);
         ImageView likeBtn = (ImageView) v.findViewById(R.id.like_btn);
 
-        // TODO: 이미지 데이터가 NULL일 경우 ERROR -> 해결 필요
-        // TODO: 이미지 URL이 너무 길어 로딩 불가능 -> 해결 필요
-        if (data.get(position).pos_imgData != null && data.get(position).equals("")) {
-            Picasso.with(context)
-                    .load(data.get(position).pos_imgData)
-                    .error(R.drawable.bg0)
-                    .fit()
-                    .centerCrop()
-                    .into(imageView);
-        } else {
-            Picasso.with(context)
-                    .load(R.drawable.bg1)
-                    .error(R.drawable.bg0)
-                    .fit()
-                    .centerCrop()
-                    .into(imageView);
-        }
+        String imgData = data.get(position).pos_imgData;
 
+        Log.d(TAG, "pos_imgData: " + imgData);
+
+        // TODO: 이미지 데이터가 NULL일 경우 ERROR -> 해결 필요
+
+            Picasso.with(context)
+                    .load(imgData)
+                    .error(R.drawable.bg0)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
 
         textView.setText(data.get(position).pos_content);
-
-        likeBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dataRef.runTransaction(new Transaction.Handler() {
-                            @Override
-                            public Transaction.Result doTransaction(MutableData mutableData) {
-                                Post p = mutableData.getValue(Post.class);
-                                if (p == null) {
-                                    return Transaction.success(mutableData);
-                                }
-
-                                if (p.likes.containsKey(getUid())) {
-                                    p.numOfLike = --p.numOfLike;
-                                    p.likes.remove(getUid());
-                                } else {
-                                    p.numOfLike = ++p.numOfLike;
-                                    p.likes.put(getUid(), true);
-                                }
-
-                                mutableData.setValue(p);
-                                return Transaction.success(mutableData);
-                            }
-
-                            @Override
-                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-                            }
-                        });
-                    }
-                }
-        );
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +99,38 @@ public class SwipeDeckAdapter extends BaseAdapter {
                 Intent i = new Intent(v.getContext(), CommentActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 v.getContext().startActivity(i);
+            }
+        });
+
+        likeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference();
+                dataRef.runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        Post p = mutableData.getValue(Post.class);
+                        if (p == null) {
+                            return Transaction.success(mutableData);
+                        }
+
+                        if (p.likes.containsKey(getUid())) {
+                            p.numOfLike = --p.numOfLike;
+                            p.likes.remove(getUid());
+                        } else {
+                            p.numOfLike = ++p.numOfLike;
+                            p.likes.put(getUid(), true);
+                        }
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                    }
+                });
+
+
             }
         });
         return v;

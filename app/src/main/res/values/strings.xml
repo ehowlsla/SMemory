@@ -49,6 +49,10 @@
     <string name="is_join">처음 오셨나요?</string>
     <string name="join"><u>가입하기</u></string>
 
+    <string name="error_sign_in_wrong_info">아이디나 비밀번호가 올바르지 않습니다.\n다시 한 번 시도해 주세요.</string>
+    <string name="error_sign_in_transmit">데이터 전송에 실패하였습니다.\n다시 한 번 시도해 주세요.</string>
+    <string name="error_sign_in_blank_id">이메일을 입력해주세요.</string>
+    <string name="error_sign_in_blank_pw">비밀번호를 입력해주세요.</string>
 
     <string name="menu1">시크릿 메모리</string>
     <string name="menu2">My 시크릿</string>

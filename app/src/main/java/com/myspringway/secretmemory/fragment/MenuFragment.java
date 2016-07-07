@@ -1,9 +1,11 @@
 package com.myspringway.secretmemory.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.myspringway.secretmemory.R;
+import com.myspringway.secretmemory.activity.LoginActivity;
 import com.myspringway.secretmemory.activity.MainActivity;
 import com.myspringway.secretmemory.activity.SignActivity;
 
@@ -26,7 +29,9 @@ import butterknife.OnClick;
  */
 public class MenuFragment extends Fragment {
 
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
+    private Context context;
+    private View view;
 
     @BindView(R.id.row1_layout)
     LinearLayout row1_layout;
@@ -48,6 +53,9 @@ public class MenuFragment extends Fragment {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out);
         mAuth.signOut();
+        getActivity().finish();
+        context.startActivity(new Intent(context, LoginActivity.class));
+        ft.commit();
     }
 
     @OnClick(R.id.row1_layout)
@@ -75,9 +83,10 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_menu, container, false);
+        view = inflater.inflate(R.layout.fragment_menu, container, false);
 
         ButterKnife.bind(this, view);
+        context = view.getContext();
 
         mAuth = FirebaseAuth.getInstance();
         return view;

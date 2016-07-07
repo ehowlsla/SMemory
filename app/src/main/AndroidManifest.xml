@@ -48,6 +48,8 @@
             android:name=".activity.WriteActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".activity.CommentActivity">
+        </activity>
 
         <service android:name=".service.MessagingService">
             <intent-filter>
@@ -60,8 +62,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.CommentActivity">
-        </activity>
+
     </application>
 
 </manifest>

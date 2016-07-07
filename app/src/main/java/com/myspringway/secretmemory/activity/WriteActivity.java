@@ -326,7 +326,7 @@ public class WriteActivity extends Activity {
         // and at /posts/$postid simultaneously
         Log.e(TAG, "writeNewPost Called!");
         String key = mDatabaseRef.child("posts").push().getKey();
-        Post post = new Post(mAuth.getCurrentUser().getEmail(), img + ".jpg", body);
+        Post post = new Post(mAuth.getCurrentUser().getEmail(), img, body);
         Map<String, Object> postValues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();

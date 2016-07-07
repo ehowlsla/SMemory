@@ -90,20 +90,6 @@ public class SignActivity extends FragmentActivity {
 //        dialog.show(getFragmentManager(), "progress");
     }
 
-
-    //Firebase GCM으로 바꾼다
-    private void registGCM() {
-//        GCMRegistrar.checkDevice(this);
-//        GCMRegistrar.checkManifest(this);
-//        final String regId = GCMRegistrar.getRegistrationId(this);
-//        if ("".equals(regId)) {
-//            GCMRegistrar.register(this, GCMConstant.SENDER_ID);
-//        }
-//        else {
-//            SharedPreferenceHelper.setValue(this, AppConstant.TOKEN_KEY, regId);
-//        }
-    }
-
     public void changeItem(int position) {
         next.setVisibility(position == mAdapter.getCount() - 1 ? View.GONE : View.VISIBLE);
     }

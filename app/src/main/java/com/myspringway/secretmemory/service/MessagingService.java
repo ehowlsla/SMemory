@@ -1,12 +1,18 @@
 package com.myspringway.secretmemory.service;
 
-import com.google.firebase.messaging.FirebaseMessagingService;
+import android.util.Log;
 
-/**
- * Created by legab on 2016-06-19.
- * This is required if you wnat to do any message handling beyond receiving notifications
- * on apps in the background. To receive notifications in foregrounded apps,
- * to receive data payload, to send upstream messages, and so on, you must extend this service.
- */
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
 public class MessagingService extends FirebaseMessagingService {
+
+    private static final String TAG = "MyFMService";
+
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.d(TAG, "FCM Message Id: " + remoteMessage.getMessageId());
+        Log.d(TAG, "FCM Notification Message: " + remoteMessage.getNotification());
+        Log.d(TAG, "FCM Data Message: " + remoteMessage.getData());
+    }
 }
