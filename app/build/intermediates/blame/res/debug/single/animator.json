@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\build\\intermediates\\res\\merged\\debug\\animator\\fade_out.xml",
+        "source": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\src\\main\\res\\animator\\fade_out.xml"
+    },
+    {
+        "merged": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\build\\intermediates\\res\\merged\\debug\\animator\\indicator_animator_reverse.xml",
+        "source": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\src\\main\\res\\animator\\indicator_animator_reverse.xml"
+    },
+    {
+        "merged": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\build\\intermediates\\res\\merged\\debug\\animator\\indicator_animator.xml",
+        "source": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\src\\main\\res\\animator\\indicator_animator.xml"
+    },
+    {
+        "merged": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\build\\intermediates\\res\\merged\\debug\\animator\\fade_in.xml",
+        "source": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\src\\main\\res\\animator\\fade_in.xml"
+    },
+    {
+        "merged": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\build\\intermediates\\res\\merged\\debug\\animator\\scale_with_alpha.xml",
+        "source": "C:\\Users\\legab\\Downloads\\SecretMemory-newbranch\\SecretMemory-newbranch\\app\\src\\main\\res\\animator\\scale_with_alpha.xml"
+    }
+]

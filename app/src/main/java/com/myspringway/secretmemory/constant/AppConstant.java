@@ -3,8 +3,7 @@ package com.myspringway.secretmemory.constant;
 /**
  * Created by yoontaesup on 2014. 12. 17..
  */
-public class AppConstant
-{
+public class AppConstant {
     public static final String EMAIL = "EMAIL";
     public static final String PASSWORD = "PASSWORD";
     public static final String UUID = "UUID";

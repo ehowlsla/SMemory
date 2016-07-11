@@ -19,7 +19,7 @@ public class Post {
     public String pos_content;
     public List<String> pos_tagList;
     public int numOfComment = 0;
-    public int numOfLike = 0;
+    public int numOfLike = 0;       // TODO: Like List 형태로 변경
     public Map<String, Boolean> likes = new HashMap<>();
 
 
@@ -48,4 +48,5 @@ public class Post {
         result.put("numOfLike", numOfLike);
         return result;
     }
+
 }

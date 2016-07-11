@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SecretMemory.iml" filepath="$PROJECT_DIR$/SecretMemory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SecretMemory-newbranch.iml" filepath="$PROJECT_DIR$/SecretMemory-newbranch.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

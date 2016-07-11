@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.myspringway.secretmemory.R;
@@ -31,6 +32,7 @@ import com.myspringway.secretmemory.model.Post;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +48,7 @@ public class CardFragment extends Fragment {
     private DatabaseReference mPostReference;
     private SwipeDeckAdapter adapter;
     private FirebaseRemoteConfig remoteConfig;
+    private String mPostKey;
 
     @BindView(R.id.swipe_deck)
     SwipeDeck swipe_deck;
@@ -63,49 +66,26 @@ public class CardFragment extends Fragment {
 
         data = new ArrayList<>();
 
-        // TODO: 데이터가 없을 때 로직 추가
-        Query query = mPostReference.child("posts");
-            query.addChildEventListener(
-                    new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Log.d(TAG, "onChildAdded");
-                            Post post = dataSnapshot.getValue(Post.class);
-                            onLikeClicked(mPostReference);
-                            if (!data.contains(post)) {
-                                data.add(post);
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                            Post post = dataSnapshot.getValue(Post.class);
-                            Log.d(TAG, "onChildChanged");
-                            onLikeClicked(mPostReference);
-                            if (!data.contains(post)) {
-                                data.add(post);
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
+        mPostReference.child("posts").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dataSnap : dataSnapshot.getChildren()) {
+                            Post post = dataSnap.getValue(Post.class);
+                            data.add(post);
+                            adapter.notifyDataSetChanged();
                         }
                     }
-            );
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+
+        // TODO: 데이터가 없을 때 로직 추가
+//
 
         adapter = new SwipeDeckAdapter(data, getContext(), getLayoutInflater(savedInstanceState));
         swipe_deck.setAdapter(adapter);
@@ -113,18 +93,21 @@ public class CardFragment extends Fragment {
         swipe_deck.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
+                Log.d(TAG, "" + position);
+                Log.d(TAG, "" + data.size());
 
-                Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
             }
 
             @Override
             public void cardSwipedRight(int position) {
-                Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
+                Log.d(TAG, "" + position);
+                Log.d(TAG, "" + data.size());
+
             }
 
             @Override
             public void cardsDepleted() {
-                Log.i("MainActivity", "no more cards");
+
             }
 
             @Override

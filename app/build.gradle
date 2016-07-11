@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
@@ -31,6 +31,7 @@ android {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/license.txt'
+        exclude 'META-INF/license/LICENSE.base64.txt'
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
         exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
@@ -57,11 +58,11 @@ dependencies {
 
     compile 'com.firebase:firebase-client-android:2.5.2+'
     compile 'com.firebaseui:firebase-ui-database:0.4.0'
-    compile 'com.google.firebase:firebase-messaging:9.0.2'
-    compile 'com.google.firebase:firebase-database:9.0.2'
-    compile 'com.google.firebase:firebase-storage:9.0.2'
-    compile 'com.google.firebase:firebase-auth:9.0.2'
-    compile 'com.google.firebase:firebase-config:9.0.2'
+    compile 'com.google.firebase:firebase-messaging:9.2.0'
+    compile 'com.google.firebase:firebase-database:9.2.0'
+    compile 'com.google.firebase:firebase-storage:9.2.0'
+    compile 'com.google.firebase:firebase-auth:9.2.0'
+    compile 'com.google.firebase:firebase-config:9.2.0'
     compile 'pub.devrel:easypermissions:0.1.7'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.pnikosis:materialish-progress:1.7'
@@ -70,5 +71,3 @@ dependencies {
     compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
 
 }
-
-apply plugin: 'com.google.gms.google-services'

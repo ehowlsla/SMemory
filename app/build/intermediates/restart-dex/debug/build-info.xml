@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="armeabi-v7a,armeabi"
+    api-level="23"
+    density="xxxhdpi"
+    format="7"
+    timestamp="13610280449185"
+    token="-386167430483945241" >
+
+    <task
+        name="javac"
+        duration="1925" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="45" />
+    <task
+        name="verifier"
+        duration="10" />
+
+    <artifact
+        location="C:\Users\legab\Downloads\SecretMemory-newbranch\SecretMemory-newbranch\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+        type="DEX" />
+
+    <build timestamp="12269018426864" >
+        <artifact
+            location="C:\Users\legab\Downloads\SecretMemory-newbranch\SecretMemory-newbranch\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
+    <build timestamp="13011027425580" >
+        <artifact
+            location="C:\Users\legab\Downloads\SecretMemory-newbranch\SecretMemory-newbranch\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_4\classes.dex"
+            type="DEX" />
+    </build>
+    <build timestamp="13610280449185" >
+        <artifact
+            location="C:\Users\legab\Downloads\SecretMemory-newbranch\SecretMemory-newbranch\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+            type="DEX" />
+    </build>
+
+</instant-run>

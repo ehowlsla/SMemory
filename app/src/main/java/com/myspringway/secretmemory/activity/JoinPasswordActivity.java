@@ -3,6 +3,7 @@ package com.myspringway.secretmemory.activity;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -60,7 +62,6 @@ public class JoinPasswordActivity extends Activity {
 
     private DatabaseReference mDataRef;
     private FirebaseAuth mAuth;
-    private Firebase ref;
 
 
     @Override
@@ -98,8 +99,8 @@ public class JoinPasswordActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                prev.setVisibility(isVisible == true ? View.VISIBLE : View.GONE);
-                next.setVisibility(isVisible == true ? View.VISIBLE : View.GONE);
+                prev.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+                next.setVisibility(isVisible ? View.VISIBLE : View.GONE);
             }
         });
     }
@@ -126,9 +127,17 @@ public class JoinPasswordActivity extends Activity {
             @Override
             public void run() {
                 if (password.getText().toString().equals(password_re.getText().toString()) && password.getText().toString().length() >= 6) {
-                    next.setBackground(getResources().getDrawable(R.drawable.green_click));
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        next.setBackground(getDrawable(R.drawable.green_click));
+                    } else {
+                        next.setBackground(getResources().getDrawable(R.drawable.green_click));
+                    }
                 } else {
-                    next.setBackground(getResources().getDrawable(R.color.black_20));
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        next.setBackground(getDrawable(R.color.black_20));
+                    } else {
+                        next.setBackground(getResources().getDrawable(R.color.black_20));
+                    }
                     if (toast) {
                         if (password.getText().toString().length() < 6)
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_length), Toast.LENGTH_SHORT).show();
@@ -192,6 +201,7 @@ public class JoinPasswordActivity extends Activity {
     }
     private void writeNewUser(String userId, String name, String email) {
         Member member = new Member(name, email);
+        mDataRef.child("members").child(userId).setValue(member);
     }
 
     PopupLoading popupLoading;

@@ -15,7 +15,6 @@ import com.myspringway.secretmemory.slideMenu.SlidingMenu;
 public class BaseActivity extends SlidingFragmentActivity {
 
     private int mTitleRes;
-    //    protected ListFragment mFrag;
     protected MenuFragment mFrag;
 
     public BaseActivity(int titleRes) {

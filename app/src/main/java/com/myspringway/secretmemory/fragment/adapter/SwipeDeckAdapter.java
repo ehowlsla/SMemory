@@ -39,6 +39,12 @@ public class SwipeDeckAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
 
+    private ImageView bgImgView;
+    private TextView contentText;
+    private ImageView likeImgView;
+    private TextView likeNumText;
+
+    /* Constructor */
     public SwipeDeckAdapter(List<Post> data, Context context, LayoutInflater inflater) {
         this.data = data;
         this.context = context;
@@ -62,47 +68,61 @@ public class SwipeDeckAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
-        View v = convertView;
-        if (v == null) {
-            v = inflater.inflate(R.layout.view_card, parent, false);
-            ((CardView) v).setRadius(0);
-            v.setPadding(0, 0, 0, 0);
+        View view = convertView;
+        if (view == null) {
+            view = inflater.inflate(R.layout.view_card, parent, false);
+            ((CardView) view).setRadius(0);
+            view.setPadding(0, 0, 0, 0);
         }
 
-        final DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference();
+        initContent(view);
 
-        Log.d(TAG, ""+data.size());
+        bindToPost(data.get(position), view);
 
-        ImageView imageView = (ImageView) v.findViewById(R.id.offer_img);
-        final TextView textView = (TextView) v.findViewById(R.id.body_text);
-        ImageView likeBtn = (ImageView) v.findViewById(R.id.like_btn);
+        return view;
+    }
 
-        String imgData = data.get(position).pos_imgData;
+    private void initContent(View view) {
+        bgImgView = (ImageView) view.findViewById(R.id.offer_img);
+        contentText = (TextView) view.findViewById(R.id.body_text);
+        likeImgView = (ImageView) view.findViewById(R.id.like_btn);
+        likeNumText = (TextView) view.findViewById(R.id.like_num);
+    }
 
-        Log.d(TAG, "pos_imgData: " + imgData);
+    private void bindToPost(final Post post, View view) {
+
+        if (post == null) {
+            Log.e(TAG, "post == null");
+            return;
+        }
+
+        final String imgData = post.pos_imgData;
+        final String contentData = post.pos_content;
+        int likeData = post.numOfLike;
 
         // TODO: 이미지 데이터가 NULL일 경우 ERROR -> 해결 필요
+        Picasso.with(context)
+                .load(imgData)
+                .error(R.drawable.bg0)
+                .fit()
+                .centerCrop()
+                .into(bgImgView);
 
-            Picasso.with(context)
-                    .load(imgData)
-                    .error(R.drawable.bg0)
-                    .fit()
-                    .centerCrop()
-                    .into(imageView);
+        contentText.setText(contentData);
 
-        textView.setText(data.get(position).pos_content);
-
-        v.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), CommentActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                i.putExtra("imgData", imgData);
+                i.putExtra("contentData", contentData);
                 v.getContext().startActivity(i);
             }
         });
 
-        likeBtn.setOnClickListener(new View.OnClickListener() {
+        likeNumText.setText("" + likeData);
+
+        likeImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference();
@@ -133,7 +153,6 @@ public class SwipeDeckAdapter extends BaseAdapter {
 
             }
         });
-        return v;
     }
 
     private String getUid() {

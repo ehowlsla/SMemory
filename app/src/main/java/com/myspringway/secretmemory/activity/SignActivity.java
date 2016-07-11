@@ -65,7 +65,7 @@ public class SignActivity extends FragmentActivity {
         mAdapter = new SignParallaxAdapter(getSupportFragmentManager());
         mAdapter.setPager(mPager); //only for this transformer
 
-        for(int i=0; i<6;i++) {
+        for (int i = 0; i < 6; i++) {
             Bundle args = new Bundle();
             args.putInt("position", i);
             SignParallaxFragment fragment = new SignParallaxFragment();

@@ -3,6 +3,7 @@ package com.myspringway.secretmemory.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.model.Comment;
-import com.myspringway.secretmemory.model.Member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +40,12 @@ public class CommentActivity extends Activity {
     EditText mCommentText;
 
     @BindView(R.id.comment_btn)
-    SubmitProcessButton mCommentBtn;
+    ActionProcessButton mCommentBtn;
 
     @BindView(R.id.recycler_comments)
     RecyclerView mCommentRecycler;
 
+    private DatabaseReference mPostRef;
     private DatabaseReference mCommentRef;
     private CommentAdapter mAdapter;
 
@@ -58,6 +59,7 @@ public class CommentActivity extends Activity {
     }
 
     private void initFirebase() {
+        mPostRef = FirebaseDatabase.getInstance().getReference().child("posts");
         mCommentRef = FirebaseDatabase.getInstance().getReference().child("post-comments");
     }
 
@@ -77,6 +79,9 @@ public class CommentActivity extends Activity {
     protected void onStart() {
         super.onStart();
         mAdapter = new CommentAdapter(this, mCommentRef);
+        mCommentRecycler.setAdapter(mAdapter);
+
+        mCommentRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private static class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
@@ -131,8 +136,8 @@ public class CommentActivity extends Activity {
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    Comment movedComment = dataSnapshot.getValue(Comment.class);
-                    String commentKey = dataSnapshot.getKey();
+//                    Comment movedComment = dataSnapshot.getValue(Comment.class);
+//                    String commentKey = dataSnapshot.getKey();
 
                     // TODO: 로직 추가 필요
                 }
@@ -176,31 +181,25 @@ public class CommentActivity extends Activity {
 
     @OnClick(R.id.comment_btn)
     public void onCommnetBtnClicked(View v) {
-        mCommentBtn.setProgress(0);
         final String uid = getUid();
-        mCommentBtn.setProgress(10);
+        mCommentBtn.setProgress(50);
         FirebaseDatabase.getInstance().getReference().child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        mCommentBtn.setProgress(30);
                         String authorName = getUid();
-                        mCommentBtn.setProgress(40);
                         String commentText = mCommentText.getText().toString();
-                        mCommentBtn.setProgress(50);
                         Comment comment = new Comment(uid, authorName, commentText);
-                        mCommentBtn.setProgress(60);
 
                         mCommentRef.push().setValue(comment);
-                        mCommentBtn.setProgress(70);
                         mCommentText.setText(null);
-                        mCommentBtn.setProgress(99);
+                        mCommentBtn.setProgress(100);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         mCommentBtn.setProgress(-1);
-                        Log.e(TAG, databaseError.getMessage().toString());
+                        Log.e(TAG, databaseError.getMessage());
                     }
                 });
 

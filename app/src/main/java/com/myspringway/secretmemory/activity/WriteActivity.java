@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.annotations.Nullable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,9 +44,11 @@ import com.myspringway.secretmemory.model.Member;
 import com.myspringway.secretmemory.model.Post;
 import com.myspringway.secretmemory.view.DynamicTag;
 
+import org.antlr.v4.runtime.misc.NotNull;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,15 +68,11 @@ public class WriteActivity extends Activity {
 
     private static final String TAG = "WriteActivity";
     private static final String EXTRA_POST_KEY = "post_key";
-    private static final String KEY_FILE_URI = "key_file_uri";
 
     private static final int GALLERY_SELECT = 0;
-    private static final int CROP_FROM_CAMERA = 1;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 20;
 
-    private Firebase ref;
     private DatabaseReference mDatabaseRef;
-    private FirebaseStorage mStorage;
     private StorageReference mStorageRef;
     private FirebaseAuth mAuth;
 
@@ -137,7 +136,6 @@ public class WriteActivity extends Activity {
     private void initFirebase() {
         mAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        mStorage = FirebaseStorage.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
@@ -168,15 +166,18 @@ public class WriteActivity extends Activity {
 
     @OnClick(R.id.close)
     void onClose() {
-        isSave = false;
-        finish();
+        goFinish();
     }
 
     @OnClick(R.id.album)
     public void goAlbum() {
+        /* (Butld version >= 6.0 Marshmallow) */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            }
+            if (ContextCompat.checkSelfPermission(this, permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             }
         }
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -224,7 +225,8 @@ public class WriteActivity extends Activity {
                             writeNewPost("", body.getText().toString());
 
                         } else {
-                            writeNewPost(mDownloadUrl.toString(), body.getText().toString());
+                            picturePath = mDownloadUrl.toString();
+                            writeNewPost(picturePath, body.getText().toString());
                             stopLoading();
                             if (isSave) {
                                 finish();
@@ -288,7 +290,9 @@ public class WriteActivity extends Activity {
                 .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        mDownloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                        if (taskSnapshot.getMetadata() != null) {
+                            mDownloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                        }
                         isImageUpload = true;
                         save.setEnabled(true);
                         // TODO: 이미지 업로드 중 save 버튼 클릭 시 mDownloadUrl == null; 수정 필요.
@@ -321,48 +325,15 @@ public class WriteActivity extends Activity {
     private void writeNewPost(String img, String body) {
         // Create new post at /user-posts/$userid/$postid
         // and at /posts/$postid simultaneously
-        Log.e(TAG, "writeNewPost Called!");
-        String key = mDatabaseRef.child("posts").push().getKey();
-        Post post = new Post(mAuth.getCurrentUser().getEmail(), img, body);
-        Map<String, Object> postValues = post.toMap();
+            String key = mDatabaseRef.child("posts").push().getKey();
+            Post post = new Post(mAuth.getCurrentUser().getEmail(), img, body);
+            Map<String, Object> postValues = post.toMap();
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/posts/" + key, postValues);
-        childUpdates.put("/user-posts/" + key, postValues);
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("/posts/" + key, postValues);
 
-        mDatabaseRef.updateChildren(childUpdates);
-        isSave = true;
-    }
-
-    public void callback() {
-        stopLoading();
-    }
-
-    public void callbackPostFinish(Post post) {
-        //이미지 있으면 이미지 업로드
-        //없으면 finish
-//        if(isImageUpload == false) {
-//            goFinish();
-//        } else {
-//            if(post == null) return;
-//            if(post.post_id == null) return;
-//            TypedFile file = new TypedFile("application/octet-stream", new File(sourceUri.getPath()));
-////            TypedFile file = new TypedFile(new File(picturePath));
-//            startLoading();
-//            presenter.onStoragePost(file, post.post_id);
-//        }
-    }
-
-    public void callbackStorePostFinish() {
-        if(sourceUri != null) {
-            File file = new File(sourceUri.getPath());
-            if(file != null) {
-                file.delete();
-                sourceUri = null;
-            }
-        }
-
-        goFinish();
+            mDatabaseRef.updateChildren(childUpdates);
+            isSave = true;
     }
 
     private void goFinish() {
@@ -455,7 +426,6 @@ public class WriteActivity extends Activity {
         if(sourceUri == null) return;
 
         File temp = new File(sourceUri.getPath());
-        if(temp == null) return;
         if(temp.exists()) {
             temp.delete();
         }

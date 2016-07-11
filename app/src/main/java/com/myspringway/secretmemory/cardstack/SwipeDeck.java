@@ -8,12 +8,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.FrameLayout;
 
 import com.myspringway.secretmemory.R;
+import com.myspringway.secretmemory.activity.MainActivity;
 
 import java.util.ArrayList;
 
@@ -61,7 +63,7 @@ public class SwipeDeck extends FrameLayout {
                 R.styleable.SwipeDeck,
                 0, 0);
         try {
-            NUMBER_OF_CARDS = a.getInt(R.styleable.SwipeDeck_max_visible, 30);
+            NUMBER_OF_CARDS = a.getInt(R.styleable.SwipeDeck_max_visible, 5);
             ROTATION_DEGREES = a.getFloat(R.styleable.SwipeDeck_rotation_degrees, 15f);
             CARD_SPACING = a.getDimension(R.styleable.SwipeDeck_card_spacing, 15f);
             RENDER_ABOVE = a.getBoolean(R.styleable.SwipeDeck_render_above, true);

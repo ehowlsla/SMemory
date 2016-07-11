@@ -3,15 +3,13 @@ package com.myspringway.secretmemory.activity;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.constant.AppConstant;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
@@ -75,8 +73,8 @@ public class JoinEmailActivity extends Activity {
     public void setVisibleBottom(final boolean isVisible) {
         runOnUiThread(new Runnable() {
             public void run() {
-                prev.setVisibility(isVisible == true ? View.VISIBLE : View.GONE);
-                next.setVisibility(isVisible == true ? View.VISIBLE : View.GONE);
+                prev.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+                next.setVisibility(isVisible ? View.VISIBLE : View.GONE);
             }
         });
     }
@@ -96,7 +94,11 @@ public class JoinEmailActivity extends Activity {
             @Override
             public void run() {
                 next.setEnabled(true);
-                next.setBackground(getResources().getDrawable(R.drawable.green_click));
+                if (Build.VERSION.SDK_INT >= 21) {
+                    next.setBackground(getDrawable(R.drawable.green_click));
+                } else {
+                    next.setBackground(getResources().getDrawable(R.drawable.green_click));
+                }
             }
         });
     }
