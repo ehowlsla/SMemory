@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.constant.AppConstant;
+import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 import com.myspringway.secretmemory.library.ClearableEditText;
 import com.myspringway.secretmemory.library.SoftKeyboard;
@@ -20,11 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by yoontaesup on 2016. 6. 11..
- */
-
 public class JoinEmailActivity extends Activity {
+
+    private static final String TAG = JoinEmailActivity.class.getSimpleName();
 
     @BindView(R.id.email)
     ClearableEditText email;
@@ -45,11 +43,15 @@ public class JoinEmailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_email);
         ButterKnife.bind(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         initObject();
     }
 
-    void initObject() {
+    private void initObject() {
         email.setEmailType(true);
 
         InputMethodManager im = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -59,7 +61,7 @@ public class JoinEmailActivity extends Activity {
             @Override
             public void onSoftKeyboardHide() {
                 setVisibleBottom(true);
-                EmailExistCheck();
+                emailExistCheck();
             }
 
             @Override
@@ -67,11 +69,11 @@ public class JoinEmailActivity extends Activity {
                 setVisibleBottom(false);
             }
         });
-
     }
 
-    public void setVisibleBottom(final boolean isVisible) {
+    private void setVisibleBottom(final boolean isVisible) {
         runOnUiThread(new Runnable() {
+            @Override
             public void run() {
                 prev.setVisibility(isVisible ? View.VISIBLE : View.GONE);
                 next.setVisibility(isVisible ? View.VISIBLE : View.GONE);
@@ -79,41 +81,72 @@ public class JoinEmailActivity extends Activity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mSoftKeyboard != null) mSoftKeyboard.unRegisterSoftKeyboardCallback();
+    private void emailExistCheck() {
+        // TODO: WEB send - JSON Receive
+        usernameFromEmail(email.getText().toString());
     }
 
-    public void EmailExistCheck() {
-        goNextEnable();
+    // Use Regex for email format validation
+    private void usernameFromEmail(String email) {
+        if (email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
+            goNextEnable();
+        } else {
+            goNextDisable();
+        }
     }
 
-    public void goNextEnable() {
+    @Deprecated
+    private void goNextEnable() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 next.setEnabled(true);
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     next.setBackground(getDrawable(R.drawable.green_click));
-                } else {
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
                     next.setBackground(getResources().getDrawable(R.drawable.green_click));
+                } else {
+                    next.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_click));
                 }
             }
         });
+    }
+
+    @Deprecated
+    private void goNextDisable() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                next.setEnabled(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    next.setBackground(getDrawable(R.color.black_20));
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                    next.setBackground(getResources().getDrawable(R.color.black_20));
+                } else {
+                    next.setBackgroundDrawable(getResources().getDrawable(R.color.black_20));
+                }
+                email.setError("이메일 형식이 잘못되었습니다.");
+            }
+        });
+    }
+
+    @OnClick(R.id.prev)
+    void prevPage() {
+        finish();
+        overridePendingTransition(0, R.animator.fade_out);
     }
 
 
     @OnClick(R.id.next)
     void nextPage() {
         SharedPreferenceHelper.setValue(this, AppConstant.EMAIL, email.getText().toString());
-        Intent intent = new Intent(getApplicationContext(), JoinPasswordActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(), JoinPasswordActivity.class));
         overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
     }
 
-    @OnClick(R.id.prev)
-    void prevPage() {
-        finish();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSoftKeyboard != null) mSoftKeyboard.unRegisterSoftKeyboardCallback();
     }
 }

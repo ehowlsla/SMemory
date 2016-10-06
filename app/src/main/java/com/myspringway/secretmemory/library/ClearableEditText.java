@@ -86,9 +86,9 @@ public class ClearableEditText extends EditText implements OnTouchListener,
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
-            setClearIconVisible(Strings.isNotEmpty(getText()), false);
+            setClearIconVisible(Strings.isNotEmpty(getText()));
         } else {
-            setClearIconVisible(false, false);
+            setClearIconVisible(false);
         }
         if (f != null) {
             f.onFocusChange(v, hasFocus);
@@ -127,8 +127,17 @@ public class ClearableEditText extends EditText implements OnTouchListener,
         addTextChangedListener(new TextWatcherAdapter(this, this));
     }
 
+    protected void setClearIconVisible(boolean visible) {
+        boolean wasVisible = (getCompoundDrawables()[2] != null); // if(null) return false;
+        if (visible != wasVisible) {
+            Drawable x = visible ? xD : null;
+            setCompoundDrawables(getCompoundDrawables()[0],
+                    getCompoundDrawables()[1], x, getCompoundDrawables()[3]);
+        }
+    }
+
     protected void setClearIconVisible(boolean visible, boolean isForce) {
-        boolean wasVisible = (getCompoundDrawables()[2] != null);
+        boolean wasVisible = (getCompoundDrawables()[2] != null); // if(null) return false;
         if (visible != wasVisible || isForce) {
             Drawable x = visible ? xD : null;
             setCompoundDrawables(getCompoundDrawables()[0],

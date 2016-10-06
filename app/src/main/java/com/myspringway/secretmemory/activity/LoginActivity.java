@@ -8,21 +8,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.constant.AppConstant;
-import com.myspringway.secretmemory.constants.HttpUrl;
+import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.dialog.PopupLoading;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 import com.myspringway.secretmemory.library.ClearableEditText;
@@ -32,17 +27,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by yoontaesup on 2016. 6. 11..
- */
-
 public class LoginActivity extends Activity {
 
     private static final String TAG = "LoginActivity";
 
     private DatabaseReference mDataRef;
     private FirebaseAuth mAuth;
-    private Firebase ref;
+    private PopupLoading popupLoading;
 
     @BindView(R.id.email)
     ClearableEditText email;
@@ -56,8 +47,6 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        Firebase.setAndroidContext(this);
-        ref = new Firebase(HttpUrl.FIREBASE_ENDPOINT);
         mDataRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
@@ -70,8 +59,13 @@ public class LoginActivity extends Activity {
 
     }
 
+    void goKakaoTalkLogin() {
+        // TODO: ADD KAKAOTALK LOGIN LOGIC
+    }
+
     @OnClick(R.id.login)
     void goLogin() {
+
         if (!validateForm()) { return; }
 
         startLoading();
@@ -83,22 +77,27 @@ public class LoginActivity extends Activity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        stopLoading();
                         if (task.isSuccessful()) {
                             onAuthSuccess(task.getResult().getUser());
+                            stopLoading();
                             finish();
-                        } else {
-                            Toast.makeText(LoginActivity.this, getResources().getString(R.string.error_sign_in_wrong_info), Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, e.getCause().getMessage());
-                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.error_sign_in_transmit), Toast.LENGTH_SHORT).show();
+                        stopLoading();
+                        Log.e(TAG, e.getMessage());
+                        handleErrorMsg(e.getMessage());
                     }
                 });
+    }
+
+    private void handleErrorMsg(String errorMsg) {
+        if (errorMsg.equals(getString(R.string.error_eng_wrong_password))) {
+            Toast.makeText(LoginActivity.this, getString(R.string.error_kor_wrong_password), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean validateForm() {
@@ -141,7 +140,6 @@ public class LoginActivity extends Activity {
         mDataRef.child("members").child(userId).setValue(member);
     }
 
-    PopupLoading popupLoading;
     private void startLoading() {
         popupLoading = new PopupLoading();
         popupLoading.show(getFragmentManager(), "loading");

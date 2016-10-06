@@ -14,28 +14,27 @@ import com.myspringway.secretmemory.slideMenu.SlidingMenu;
  */
 public class BaseActivity extends SlidingFragmentActivity {
 
+    private static final String TAG = BaseActivity.class.getSimpleName();
+
     private int mTitleRes;
     protected MenuFragment mFrag;
 
     public BaseActivity(int titleRes) {
-        this.mTitleRes = titleRes;
+        mTitleRes = titleRes;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setTitle(mTitleRes);
-
-        // set the Behind View
         setBehindContentView(R.layout.menu_frame);
+        setTitle(mTitleRes);
         if (savedInstanceState == null) {
-            FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
             mFrag = new MenuFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.menu_frame, mFrag);
             fragmentTransaction.commit();
         } else {
-            mFrag = (MenuFragment) this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
+            mFrag = (MenuFragment) getSupportFragmentManager().findFragmentById(R.id.menu_frame);
         }
 
         // customize the SlidingMenu

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,19 +20,18 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.activity.CommentActivity;
+import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.model.Post;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import butterknife.OnClick;
 
 /**
  * Created by legab on 2016-06-30.
  */
 public class SwipeDeckAdapter extends BaseAdapter {
 
-    private static final String TAG = "SwipeDeckAdapter";
+    private static final String TAG = SwipeDeckAdapter.class.getSimpleName();
 
     private List<Post> data;
     private Context context;
@@ -92,12 +90,13 @@ public class SwipeDeckAdapter extends BaseAdapter {
     private void bindToPost(final Post post, View view) {
 
         if (post == null) {
-            Log.e(TAG, "post == null");
+            Log.e(TAG, "Post is null");
             return;
         }
 
         final String imgData = post.pos_imgData;
         final String contentData = post.pos_content;
+        final String contentKey = post.pos_key;
         int likeData = post.numOfLike;
 
         // TODO: 이미지 데이터가 NULL일 경우 ERROR -> 해결 필요
@@ -105,7 +104,6 @@ public class SwipeDeckAdapter extends BaseAdapter {
                 .load(imgData)
                 .error(R.drawable.bg0)
                 .fit()
-                .centerCrop()
                 .into(bgImgView);
 
         contentText.setText(contentData);
@@ -114,14 +112,16 @@ public class SwipeDeckAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), CommentActivity.class);
-                i.putExtra("imgData", imgData);
-                i.putExtra("contentData", contentData);
+                i.putExtra(AppConstant.IMG_URL, imgData);
+                i.putExtra(AppConstant.TXT_CONTENT, contentData);
+                i.putExtra(AppConstant.USER_CONTENT_ID, contentKey);
                 v.getContext().startActivity(i);
             }
         });
 
         likeNumText.setText("" + likeData);
 
+        // TODO: Click 시 실시간 데이터 변화를 어떻게 처리할 것인지 고민해봐야 함
         likeImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,8 +149,6 @@ public class SwipeDeckAdapter extends BaseAdapter {
 
                     }
                 });
-
-
             }
         });
     }

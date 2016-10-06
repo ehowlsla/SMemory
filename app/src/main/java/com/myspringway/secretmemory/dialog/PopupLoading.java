@@ -2,6 +2,7 @@ package com.myspringway.secretmemory.dialog;
 
 import android.app.DialogFragment;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,14 @@ public class PopupLoading extends DialogFragment {
         View rootView = inflater.inflate(R.layout.popup_loading, container);
         ProgressWheel progress_wheel = (ProgressWheel) rootView.findViewById(R.id.progress_wheel);
         progress_wheel.setBarColor(getResources().getColor(R.color.green_on));
-        progress_wheel.setBackground(getResources().getDrawable(R.color.transparent));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            progress_wheel.setBackground(getActivity().getDrawable(R.color.transparent));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+            progress_wheel.setBackground(getResources().getDrawable(R.color.transparent));
+        } else {
+            progress_wheel.setBackgroundDrawable(getResources().getDrawable(R.color.transparent));
+        }
         progress_wheel.setRimColor(getResources().getColor(R.color.transparent));
 
 

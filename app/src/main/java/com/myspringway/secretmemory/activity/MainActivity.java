@@ -1,6 +1,7 @@
 package com.myspringway.secretmemory.activity;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.fragment.CardFragment;

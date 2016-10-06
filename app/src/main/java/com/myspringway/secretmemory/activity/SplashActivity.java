@@ -14,7 +14,7 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.constant.AppConstant;
+import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 
 import butterknife.ButterKnife;
@@ -40,18 +40,19 @@ public class SplashActivity extends Activity {
 
         String email = SharedPreferenceHelper.getValue(this, AppConstant.EMAIL);;
         String password = SharedPreferenceHelper.getValue(this, AppConstant.PASSWORD);;
-
-        mAuth.getCurrentUser().linkWithCredential(EmailAuthProvider.getCredential(email, password))
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            mUser = task.getResult().getUser();
-                        } else {
-                            Toast.makeText(SplashActivity.this, getResources().getString(R.string.error_sign_in_wrong_info), Toast.LENGTH_SHORT).show();
+        if (mAuth.getCurrentUser() != null) {
+            mAuth.getCurrentUser().linkWithCredential(EmailAuthProvider.getCredential(email, password))
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                mUser = task.getResult().getUser();
+                            } else {
+                                Toast.makeText(SplashActivity.this, getResources().getString(R.string.error_sign_in_wrong_pw), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

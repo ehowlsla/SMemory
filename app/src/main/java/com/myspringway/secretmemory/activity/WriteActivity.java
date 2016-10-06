@@ -1,5 +1,6 @@
 package com.myspringway.secretmemory.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -22,8 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.annotations.Nullable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,15 +39,12 @@ import com.myspringway.secretmemory.dialog.PopupLoading;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 import com.myspringway.secretmemory.library.ImageUtils;
 import com.myspringway.secretmemory.library.SoftKeyboard;
-import com.myspringway.secretmemory.model.Member;
 import com.myspringway.secretmemory.model.Post;
 import com.myspringway.secretmemory.view.DynamicTag;
 
-import org.antlr.v4.runtime.misc.NotNull;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,13 +57,9 @@ import butterknife.OnTextChanged;
 
 import static android.Manifest.permission;
 
-/**
- * Created by yoontaesup on 2015. 6. 16..
- */
 public class WriteActivity extends Activity {
 
-    private static final String TAG = "WriteActivity";
-    private static final String EXTRA_POST_KEY = "post_key";
+    private static final String TAG = WriteActivity.class.getSimpleName();
 
     private static final int GALLERY_SELECT = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 20;
@@ -75,8 +67,6 @@ public class WriteActivity extends Activity {
     private DatabaseReference mDatabaseRef;
     private StorageReference mStorageRef;
     private FirebaseAuth mAuth;
-
-    private SoftKeyboard softKeyboard;
 
     private PopupLoading popupLoading;
     private List<DynamicTag> dynamicTagList;
@@ -87,7 +77,6 @@ public class WriteActivity extends Activity {
     private String picturePath = "";
     private Uri sourceUri = null;
     private Uri mDownloadUrl = null;
-
 
     @BindView(R.id.bg)
     ImageView bg;
@@ -128,6 +117,7 @@ public class WriteActivity extends Activity {
         initFirebase();
         initObject();
 
+        // TODO: 이미지가 null일 경우 자동 처리 로직 추가
         save.setEnabled(false);
 
         dynamicTagList = new ArrayList<>();
@@ -141,8 +131,7 @@ public class WriteActivity extends Activity {
 
     private void initObject() {
         InputMethodManager im = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
-
-        softKeyboard = new SoftKeyboard(root_layout, im);
+        SoftKeyboard softKeyboard = new SoftKeyboard(root_layout, im);
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
             @Override
             public void onSoftKeyboardHide() {
@@ -169,24 +158,36 @@ public class WriteActivity extends Activity {
         goFinish();
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @OnClick(R.id.album)
     public void goAlbum() {
-        /* (Butld version >= 6.0 Marshmallow) */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-            }
-            if (ContextCompat.checkSelfPermission(this, permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        if (checkDeviceVersion()) {
+            if (havePermissionYet()) {
+                openDialogToGetPermission();
             }
         }
+        openGalleryToGetImage();
+    }
+
+    private boolean checkDeviceVersion() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+
+    private boolean havePermissionYet() {
+        return ContextCompat.checkSelfPermission(this, permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void openDialogToGetPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+    }
+
+    private void openGalleryToGetImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, GALLERY_SELECT);
     }
 
     private void copyImageToStorage(Intent data) {
-        Log.d(TAG, "copyImageToStorage:data:" + data.getData().toString());
         sourceUri = data.getData();
         File origin = ImageUtils.getImageFile(getApplicationContext(), sourceUri);
         sourceUri = ImageUtils.createTempFile();
@@ -200,22 +201,15 @@ public class WriteActivity extends Activity {
 
     @OnClick(R.id.save)
     public void goSave() {
-
-        if(isValidTag()){
-            goTagEditHide();
-        }
-
+        if (isValidTag()) { goTagEditHide(); }
         startLoading();
-
-        if (TextUtils.isEmpty(body.getText())) {
+        if (isEmptyBody(body)) {
             stopLoading();
             Toast.makeText(WriteActivity.this, getResources().getString(R.string.error_write_text_null), Toast.LENGTH_SHORT).show();
             return;
         }
-
         uploadFromUri(sourceUri);
-
-        final String memberId = getUid();
+        final String memberId = getMemberUid();
         mDatabaseRef.child("members").child(memberId).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -243,11 +237,15 @@ public class WriteActivity extends Activity {
     }
 
     private boolean isValidTag() {
-        return tag_body.getText().toString().length() > 0 && tag_values.getChildCount() == 0;
+        return ((tag_body.getText().toString().length() > 0) && (tag_values.getChildCount() == 0));
+    }
+
+    private boolean isEmptyBody(EditText editText) {
+        return TextUtils.isEmpty(editText.getText());
     }
 
     private void goTagEditHide() {
-        if(tag_body.getText().toString().length() == 0)
+        if (tag_body.getText().toString().length() == 0)
             return;
 
         runOnUiThread(new Runnable() {
@@ -280,7 +278,6 @@ public class WriteActivity extends Activity {
     private void uploadFromUri(Uri fileUri) {
         if (fileUri == null) {
             return;
-            // TODO : 사진을 선택하지 않았을 때 기본 이미지 적용 로직 추가
         }
 
         final StorageReference photoRef = mStorageRef.child("photos")
@@ -295,7 +292,6 @@ public class WriteActivity extends Activity {
                         }
                         isImageUpload = true;
                         save.setEnabled(true);
-                        // TODO: 이미지 업로드 중 save 버튼 클릭 시 mDownloadUrl == null; 수정 필요.
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
@@ -308,7 +304,7 @@ public class WriteActivity extends Activity {
 
     }
 
-    private String getUid() {
+    private String getMemberUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
@@ -318,22 +314,22 @@ public class WriteActivity extends Activity {
     }
 
     private void stopLoading() {
-        if(popupLoading != null) popupLoading.dismiss();
+        if (popupLoading != null) popupLoading.dismiss();
 
     }
 
     private void writeNewPost(String img, String body) {
         // Create new post at /user-posts/$userid/$postid
         // and at /posts/$postid simultaneously
-            String key = mDatabaseRef.child("posts").push().getKey();
-            Post post = new Post(mAuth.getCurrentUser().getEmail(), img, body);
-            Map<String, Object> postValues = post.toMap();
+        String key = mDatabaseRef.child("posts").push().getKey();
+        Post post = new Post(mAuth.getCurrentUser().getEmail(), img, body);
+        Map<String, Object> postValues = post.toMap();
 
-            Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("/posts/" + key, postValues);
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/posts/" + key, postValues);
 
-            mDatabaseRef.updateChildren(childUpdates);
-            isSave = true;
+        mDatabaseRef.updateChildren(childUpdates);
+        isSave = true;
     }
 
     private void goFinish() {
@@ -381,7 +377,7 @@ public class WriteActivity extends Activity {
         tag_values.setVisibility(View.GONE);
 
         String value = tag_body.getText().toString();
-        if(value.length() != 0) tag_body.setText(value + " #");
+        if (value.length() != 0) tag_body.setText(value + " #");
         else tag_body.setText("#");
         tag_body.setSelection(tag_body.getText().toString().length());
         tag_body.requestFocus();
@@ -392,11 +388,18 @@ public class WriteActivity extends Activity {
 
     @OnTextChanged(R.id.tag_body)
     void goTagChange(CharSequence s, int start, int before, int count) {
-        if(s.toString().length() > 0 && start+1 <= s.toString().length() && " ".equals(s.toString().substring(start, start+1)) ) {
+        if (s.toString().length() > 0 && start + 1 <= s.toString().length() && " ".equals(s.toString().substring(start, start + 1))) {
             String value = tag_body.getText().toString();
-            if(value.length() != 0) tag_body.setText(value + " #");
-            else tag_body.setText("#");
-            if(value.indexOf("#") != 0) tag_body.setText("#" + tag_body.getText().toString());
+
+            if (value.length() != 0) {
+                tag_body.setText(value + " #");
+            } else {
+                tag_body.setText("#");
+            }
+
+            if (value.indexOf("#") != 0) {
+                tag_body.setText("#" + tag_body.getText().toString());
+            }
             tag_body.setSelection(tag_body.getText().toString().length());
         }
     }
@@ -404,7 +407,7 @@ public class WriteActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(isSave == false) {
+        if (!isSave) {
             SharedPreferenceHelper.setValue(getApplicationContext(), "body", "");
             SharedPreferenceHelper.setValue(getApplicationContext(), "tag", "");
         } else {
@@ -423,10 +426,12 @@ public class WriteActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(sourceUri == null) return;
+        if (sourceUri == null) {
+            return;
+        }
 
         File temp = new File(sourceUri.getPath());
-        if(temp.exists()) {
+        if (temp.exists()) {
             temp.delete();
         }
     }

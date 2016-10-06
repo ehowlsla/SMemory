@@ -13,17 +13,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.constant.AppConstant;
+import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.dialog.PopupLoading;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 import com.myspringway.secretmemory.library.ClearableEditText;
@@ -41,7 +40,9 @@ import butterknife.OnTextChanged;
 
 public class JoinPasswordActivity extends Activity {
 
-    private static final String TAG = "JoinPasswordActivity";
+    private static final String TAG = JoinPasswordActivity.class.getSimpleName();
+
+    private static final int PASSWORD_MIN = 6;
 
     @BindView(R.id.password)
     ClearableEditText password;
@@ -127,23 +128,31 @@ public class JoinPasswordActivity extends Activity {
             @Override
             public void run() {
                 if (password.getText().toString().equals(password_re.getText().toString()) && password.getText().toString().length() >= 6) {
-                    if (Build.VERSION.SDK_INT >= 21) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         next.setBackground(getDrawable(R.drawable.green_click));
-                    } else {
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
                         next.setBackground(getResources().getDrawable(R.drawable.green_click));
-                    }
-                } else {
-                    if (Build.VERSION.SDK_INT >= 21) {
-                        next.setBackground(getDrawable(R.color.black_20));
                     } else {
+                        next.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_click));
+                    }
+                    next.setEnabled(true);
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        next.setBackground(getDrawable(R.color.black_20));
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
                         next.setBackground(getResources().getDrawable(R.color.black_20));
+                    } else {
+                        next.setBackgroundDrawable(getResources().getDrawable(R.color.black_20));
                     }
                     if (toast) {
-                        if (password.getText().toString().length() < 6)
+                        if (password.getText().toString().length() < PASSWORD_MIN)
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_length), Toast.LENGTH_SHORT).show();
+                        else if (password.getText().toString().matches("((?=.*\\d)(?=.*[a-z]).{6,20})"))
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_pattern), Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
                     }
+                    next.setEnabled(false);
                 }
             }
         });
@@ -180,7 +189,22 @@ public class JoinPasswordActivity extends Activity {
                             Log.e(TAG, "가입 실패");
                         }
                     }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.getMessage());
+                        handleErrorMessage(e.getMessage().trim());
+                    }
                 });
+    }
+
+    void handleErrorMessage(String errorString) {
+        Log.d(TAG, getString(R.string.error_eng_duplicate));
+        if (errorString.equals(getString(R.string.error_eng_duplicate))) {
+            Toast.makeText(JoinPasswordActivity.this, getString(R.string.error_kor_duplicate), Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void startLoading() {
@@ -196,7 +220,6 @@ public class JoinPasswordActivity extends Activity {
 
     private void onAuthSuccess(FirebaseUser user) {
         String username = user.getEmail();
-
         writeNewUser(user.getUid(), username, user.getEmail());
     }
     private void writeNewUser(String userId, String name, String email) {

@@ -8,19 +8,19 @@ package org.apmem.tools.layouts;
 
 public final class R {
 	public static final class attr {
-		public static final int debugDraw = 0x7f0100d1;
-		public static final int layoutDirection = 0x7f0100d0;
-		public static final int layout_newLine = 0x7f0100d3;
-		public static final int layout_weight = 0x7f0100d4;
-		public static final int weightDefault = 0x7f0100d2;
+		public static final int debugDraw = 0x7f0100d7;
+		public static final int layoutDirection = 0x7f0100d6;
+		public static final int layout_newLine = 0x7f0100d9;
+		public static final int layout_weight = 0x7f0100da;
+		public static final int weightDefault = 0x7f0100d8;
 	}
 	public static final class id {
 		public static final int ltr = 0x7f0e0032;
 		public static final int rtl = 0x7f0e0033;
 	}
 	public static final class styleable {
-		public static final int[] FlowLayout = { 0x010100af, 0x010100c4, 0x7f0100d0, 0x7f0100d1, 0x7f0100d2 };
-		public static final int[] FlowLayout_LayoutParams = { 0x010100b3, 0x7f0100d3, 0x7f0100d4 };
+		public static final int[] FlowLayout = { 0x010100af, 0x010100c4, 0x7f0100d6, 0x7f0100d7, 0x7f0100d8 };
+		public static final int[] FlowLayout_LayoutParams = { 0x010100b3, 0x7f0100d9, 0x7f0100da };
 		public static final int FlowLayout_LayoutParams_android_layout_gravity = 0;
 		public static final int FlowLayout_LayoutParams_layout_newLine = 1;
 		public static final int FlowLayout_LayoutParams_layout_weight = 2;

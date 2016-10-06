@@ -13,7 +13,7 @@ import android.view.animation.OvershootInterpolator;
 public class SwipeListener implements View.OnTouchListener {
 
     private float ROTATION_DEGREES = 15f;
-    float OPACITY_END = 0.33f;
+    private float OPACITY_END = 0.33f;
     private float initialX;
     private float initialY;
 
@@ -117,8 +117,8 @@ public class SwipeListener implements View.OnTouchListener {
                 card.setY(posY);
 
                 //card.setRotation
-                float distobjectX = posX - initialX;
-                float rotation = ROTATION_DEGREES * 2.f * distobjectX / parentWidth;
+                float distObjectX = posX - initialX;
+                float rotation = ROTATION_DEGREES * 2.f * distObjectX / parentWidth;
                 card.setRotation(rotation);
 
                 float alpha = (((posX - paddingLeft) / (parentWidth * OPACITY_END)));

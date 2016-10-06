@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">시크릿 메모리</string>
+    <string name="app_name">Secret Memory</string>
 
 
     <!--<string name="phone_auth">휴대폰 인증</string>-->
@@ -24,6 +24,7 @@
     <string name="join_n">회원가입</string>
 
     <string name="invalid_length">비밀번호는 6자리 이상으로 설정해주세요.</string>
+    <string name="invalid_pattern">비밀번호는 영문 소문자와 숫자로 이뤄져야 합니다.</string>
     <string name="invalid_password">비밀번호가 일치하지 않습니다.</string>
 
 
@@ -40,7 +41,7 @@
     <string name="join_password_info">사용하실 비밀번호를 입력해주세요</string>
     <string name="join_password_hint">비밀번호</string>
     <string name="join_password_hint_re">비밀번호 재입력</string>
-    <string name="join_password_bottom_info">* 영문 또는 숫자 4자리 이상을 입력해주세요</string>
+    <string name="join_password_bottom_info">* 영문과 숫자를 조합해서 6자리 이상을 입력해주세요</string>
 
     <string name="find_password"><u>비밀번호 찾기</u></string>
 
@@ -49,7 +50,7 @@
     <string name="is_join">처음 오셨나요?</string>
     <string name="join"><u>가입하기</u></string>
 
-    <string name="error_sign_in_wrong_info">아이디나 비밀번호가 올바르지 않습니다.\n다시 한 번 시도해 주세요.</string>
+    <string name="error_sign_in_wrong_pw">아이디나 비밀번호가 올바르지 않습니다.\n다시 한 번 시도해 주세요.</string>
     <string name="error_sign_in_transmit">데이터 전송에 실패하였습니다.\n다시 한 번 시도해 주세요.</string>
     <string name="error_sign_in_blank_id">이메일을 입력해주세요.</string>
     <string name="error_sign_in_blank_pw">비밀번호를 입력해주세요.</string>
@@ -91,4 +92,12 @@
     <string name="comment_btn_done">완료</string>
     <string name="comment_btn_error">실패</string>
 
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+
+    <string name="error_eng_duplicate">The email address is already in use by another account.</string>
+    <string name="error_kor_duplicate">다른 사용자가 사용하고 있는 이메일 주소입니다.</string>
+    <string name="error_eng_bad_format">The email address is badly formatted.</string>
+    <string name="error_kor_bad_format">이메일 형식이 잘못되었습니다.</string>
+    <string name="error_eng_wrong_password">The password is invalid or the user does not have a password.</string>
+    <string name="error_kor_wrong_password">비밀번호가 잘못되었습니다.\n다시 한번 입력해주세요.</string>
 </resources>

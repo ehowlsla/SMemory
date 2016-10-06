@@ -8,23 +8,23 @@ package com.pnikosis.materialishprogress;
 
 public final class R {
 	public static final class attr {
-		public static final int matProg_barColor = 0x7f0100f0;
-		public static final int matProg_barSpinCycleTime = 0x7f0100f4;
-		public static final int matProg_barWidth = 0x7f0100f7;
-		public static final int matProg_circleRadius = 0x7f0100f5;
-		public static final int matProg_fillRadius = 0x7f0100f6;
-		public static final int matProg_linearProgress = 0x7f0100f8;
-		public static final int matProg_progressIndeterminate = 0x7f0100ef;
-		public static final int matProg_rimColor = 0x7f0100f1;
-		public static final int matProg_rimWidth = 0x7f0100f2;
-		public static final int matProg_spinSpeed = 0x7f0100f3;
+		public static final int matProg_barColor = 0x7f0100f6;
+		public static final int matProg_barSpinCycleTime = 0x7f0100fa;
+		public static final int matProg_barWidth = 0x7f0100fd;
+		public static final int matProg_circleRadius = 0x7f0100fb;
+		public static final int matProg_fillRadius = 0x7f0100fc;
+		public static final int matProg_linearProgress = 0x7f0100fe;
+		public static final int matProg_progressIndeterminate = 0x7f0100f5;
+		public static final int matProg_rimColor = 0x7f0100f7;
+		public static final int matProg_rimWidth = 0x7f0100f8;
+		public static final int matProg_spinSpeed = 0x7f0100f9;
 	}
 	public static final class string {
 		public static final int app_name = 0x7f070033;
-		public static final int default_progressbar = 0x7f07003b;
+		public static final int default_progressbar = 0x7f07003c;
 	}
 	public static final class styleable {
-		public static final int[] ProgressWheel = { 0x7f0100ef, 0x7f0100f0, 0x7f0100f1, 0x7f0100f2, 0x7f0100f3, 0x7f0100f4, 0x7f0100f5, 0x7f0100f6, 0x7f0100f7, 0x7f0100f8 };
+		public static final int[] ProgressWheel = { 0x7f0100f5, 0x7f0100f6, 0x7f0100f7, 0x7f0100f8, 0x7f0100f9, 0x7f0100fa, 0x7f0100fb, 0x7f0100fc, 0x7f0100fd, 0x7f0100fe };
 		public static final int ProgressWheel_matProg_barColor = 1;
 		public static final int ProgressWheel_matProg_barSpinCycleTime = 5;
 		public static final int ProgressWheel_matProg_barWidth = 8;

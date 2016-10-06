@@ -4,22 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -32,7 +28,6 @@ import com.myspringway.secretmemory.model.Post;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,13 +37,10 @@ import butterknife.OnClick;
 
 public class CardFragment extends Fragment {
 
-    private static final String TAG = "CardFragment";
+    private static final String TAG = CardFragment.class.getSimpleName();
 
     private List<Post> data;
-    private DatabaseReference mPostReference;
     private SwipeDeckAdapter adapter;
-    private FirebaseRemoteConfig remoteConfig;
-    private String mPostKey;
 
     @BindView(R.id.swipe_deck)
     SwipeDeck swipe_deck;
@@ -56,13 +48,26 @@ public class CardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_card, container, false);
+        final View view = inflater.inflate(R.layout.fragment_card, container, false);
         ButterKnife.bind(this, view);
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         initFirebase();
+        setSwipeSystem(savedInstanceState);
+
+        return view;
+    }
+
+    private void initFirebase() {
+        DatabaseReference mPostReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder().setDeveloperModeEnabled(true).build();
+        Map<String, Object> defaultConfigMap = new HashMap<>();
+        defaultConfigMap.put("msg_length_limit", 140L);
+
+        remoteConfig.setConfigSettings(remoteConfigSettings);
+        remoteConfig.setDefaults(defaultConfigMap);
 
         data = new ArrayList<>();
 
@@ -79,17 +84,28 @@ public class CardFragment extends Fragment {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Toast.makeText(getActivity(), "데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "ValueEventListener: onCancelled: " + databaseError.getMessage());
                     }
                 }
         );
 
-        // TODO: 데이터가 없을 때 로직 추가
-//
+        fetchConfig();
+    }
 
+    private void fetchConfig() {
+
+    }
+
+    public void resetCardPosition() {
+        if(swipe_deck != null) {
+            swipe_deck.resetCardPosition();
+        }
+    }
+
+    private void setSwipeSystem(Bundle savedInstanceState) {
         adapter = new SwipeDeckAdapter(data, getContext(), getLayoutInflater(savedInstanceState));
         swipe_deck.setAdapter(adapter);
-
         swipe_deck.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
@@ -119,33 +135,6 @@ public class CardFragment extends Fragment {
             }
 
         });
-
-        return view;
-    }
-
-    private void initFirebase() {
-        mPostReference = FirebaseDatabase.getInstance().getReference();
-        remoteConfig = FirebaseRemoteConfig.getInstance();
-
-        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder().setDeveloperModeEnabled(true).build();
-
-        Map<String, Object> defaultConfigMap = new HashMap<>();
-        defaultConfigMap.put("msg_length_limit", 140L);
-
-        remoteConfig.setConfigSettings(remoteConfigSettings);
-        remoteConfig.setDefaults(defaultConfigMap);
-
-        fetchConfig();
-    }
-
-    private void fetchConfig() {
-
-    }
-
-    public void resetCardPosition() {
-        if(swipe_deck != null) {
-            swipe_deck.resetCardPosition();
-        }
     }
 
     private void onLikeClicked(DatabaseReference postRef) {
@@ -176,7 +165,7 @@ public class CardFragment extends Fragment {
             public void onComplete(DatabaseError databaseError, boolean b,
                                    DataSnapshot dataSnapshot) {
                 // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+                Log.d(TAG, "postTransaction: onComplete:" + databaseError);
             }
         });
     }

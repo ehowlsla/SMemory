@@ -7,8 +7,9 @@ import android.preference.PreferenceManager;
 
 public class SharedPreferenceHelper {
     public static void setValue(Context context, String key, String value) {
-        if (value == null) return;
-        if ("null".equals(value)) return;
+        if (value == null) { return; }
+        if ("null".equals(value)) { return; }
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Editor ed = prefs.edit();
         ed.putString(key, value);

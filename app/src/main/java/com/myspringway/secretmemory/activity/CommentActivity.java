@@ -1,20 +1,26 @@
 package com.myspringway.secretmemory.activity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
-import com.dd.processbutton.iml.SubmitProcessButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.myspringway.secretmemory.R;
+import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.model.Comment;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +40,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CommentActivity extends Activity {
+public class CommentActivity extends AppCompatActivity {
 
-    private static final String TAG = "CommentActivity";
+    private static final String TAG = CommentActivity.class.getSimpleName();
+
+    @BindView(R.id.toolbar_bg)
+    ImageView mToolbarBg;
+
+    @BindView(R.id.toolbar_text)
+    TextView mToolbarText;
 
     @BindView(R.id.comment_text)
     EditText mCommentText;
@@ -45,29 +59,70 @@ public class CommentActivity extends Activity {
     @BindView(R.id.recycler_comments)
     RecyclerView mCommentRecycler;
 
-    private DatabaseReference mPostRef;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
     private DatabaseReference mCommentRef;
     private CommentAdapter mAdapter;
+
+    private String imgUrl;
+    private String txtContent;
+    private String postId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
         setContentView(R.layout.activity_comment);
         ButterKnife.bind(this);
 
+        getIntentData(getIntent());
+
+        setToolbar();
+
         initFirebase();
+
+        Picasso
+                .with(this)
+                .load(imgUrl)
+                .fit()
+                .into(mToolbarBg);
+
+        mToolbarText.setText(txtContent);
     }
 
+    private void getIntentData(Intent intent) {
+        imgUrl = intent.getStringExtra(AppConstant.IMG_URL);
+        txtContent = intent.getStringExtra(AppConstant.TXT_CONTENT);
+        postId = intent.getStringExtra(AppConstant.USER_CONTENT_ID);
+    }
+
+    private void setToolbar() {
+        if (getSupportActionBar() != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("");
+        }
+    }
+
+    @Nullable
     private void initFirebase() {
-        mPostRef = FirebaseDatabase.getInstance().getReference().child("posts");
-        mCommentRef = FirebaseDatabase.getInstance().getReference().child("post-comments");
+        if (postId != null) {
+            mCommentRef = FirebaseDatabase.getInstance().getReference().child(postId).child("post-comments");
+        } else {
+            Toast.makeText(this, "잘못된 데이터가 수신되었습니다.", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "initFirebase: postId is null");
+        }
     }
 
     private static class CommentViewHolder extends RecyclerView.ViewHolder {
-        public TextView authorView;
-        public TextView bodyView;
+        TextView authorView;
+        TextView bodyView;
 
-        public CommentViewHolder(View itemView) {
+        CommentViewHolder(View itemView) {
             super(itemView);
 
             authorView = (TextView) itemView.findViewById(R.id.comment_author);
@@ -92,7 +147,7 @@ public class CommentActivity extends Activity {
         private List<String> mCommentIds = new ArrayList<>();
         private List<Comment> mComments = new ArrayList<>();
 
-        public CommentAdapter(final Context context, DatabaseReference ref) {
+        CommentAdapter(final Context context, DatabaseReference ref) {
             mContext = context;
             mDatabaseRef = ref;
 
@@ -213,5 +268,29 @@ public class CommentActivity extends Activity {
 
     private String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            overridePendingTransition(0, R.animator.fade_out);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            overridePendingTransition(0, R.animator.fade_out);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        overridePendingTransition(0, R.animator.fade_out);
     }
 }

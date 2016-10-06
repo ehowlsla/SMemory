@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.constant.AppConstant;
+import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 import com.myspringway.secretmemory.sign.CircleIndicator;
 import com.myspringway.secretmemory.sign.ParallaxPagerTransformer;

@@ -48,8 +48,10 @@
             android:name=".activity.WriteActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".activity.CommentActivity">
-        </activity>
+        <activity
+            android:name=".activity.CommentActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+        />
 
         <service android:name=".service.MessagingService">
             <intent-filter>

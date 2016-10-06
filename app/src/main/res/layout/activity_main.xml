@@ -23,14 +23,14 @@
 
             <ImageView
                 android:id="@+id/menu"
-                android:src="@drawable/menu"
+                android:background="@drawable/sel_icn_menu"
                 android:layout_alignParentLeft="true"
                 android:layout_width="30dp"
                 android:layout_height="30dp" />
 
             <ImageView
                 android:id="@+id/alarm"
-                android:src="@drawable/alarm"
+                android:background="@drawable/sel_icn_alarm"
                 android:layout_alignParentRight="true"
                 android:layout_width="30dp"
                 android:layout_height="30dp" />
