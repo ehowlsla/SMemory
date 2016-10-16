@@ -54,7 +54,8 @@ public class ActivityComment extends AppCompatActivity {
     EditText mCommentText;
 
     @BindView(R.id.comment_btn)
-    ActionProcessButton mCommentBtn;
+    TextView comment_btn;
+//    ActionProcessButton mCommentBtn;
 
     @BindView(R.id.recycler_comments)
     RecyclerView mCommentRecycler;
@@ -237,7 +238,7 @@ public class ActivityComment extends AppCompatActivity {
     @OnClick(R.id.comment_btn)
     public void onCommnetBtnClicked(View v) {
         final String uid = getUid();
-        mCommentBtn.setProgress(50);
+//        mCommentBtn.setProgress(50);
         FirebaseDatabase.getInstance().getReference().child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -248,12 +249,12 @@ public class ActivityComment extends AppCompatActivity {
 
                         mCommentRef.push().setValue(comment);
                         mCommentText.setText(null);
-                        mCommentBtn.setProgress(100);
+//                        mCommentBtn.setProgress(100);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        mCommentBtn.setProgress(-1);
+//                        mCommentBtn.setProgress(-1);
                         Log.e(TAG, databaseError.getMessage());
                     }
                 });
