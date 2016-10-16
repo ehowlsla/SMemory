@@ -6,10 +6,14 @@
     <color name="white">#ffffff</color>
 
     <color name="white_80">#ccffffff</color>
+    <color name="white_90">#ddffffff</color>
     <color name="white_60">#99ffffff</color>
 
     <color name="white_20">#22ffffff</color>
+    <color name="white_30">#33ffffff</color>
+
     <color name="black_20">#22000000</color>
+    <color name="black_30">#33000000</color>
     <color name="black">#ff000000</color>
     <color name="green_on">#cc53bd9e</color>
     <color name="green_off">#cc009dad</color>

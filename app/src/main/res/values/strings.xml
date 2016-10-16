@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Secret Memory</string>
+    <string name="app_name">시크릿메모리</string>
 
 
     <!--<string name="phone_auth">휴대폰 인증</string>-->
@@ -23,6 +23,8 @@
 
     <string name="join_n">회원가입</string>
 
+    <string name="function_no_active">곧 지원될 예정입니다</string>
+
     <string name="invalid_length">비밀번호는 6자리 이상으로 설정해주세요.</string>
     <string name="invalid_pattern">비밀번호는 영문 소문자와 숫자로 이뤄져야 합니다.</string>
     <string name="invalid_password">비밀번호가 일치하지 않습니다.</string>
@@ -31,6 +33,17 @@
     <string name="no_name">(알 수 없음)</string>
 
     <string name="hello">반갑습니다!</string>
+
+    <string name="join_pastor_title">담임목사명</string>
+    <string name="join_pastor_info">담임목사님 성함을 입력해주세요</string>
+    <string name="join_pastor_hint">담임목사님 성함 입력</string>
+    <string name="join_pastor_bottom_info">* 가정교회만 이용할 수 있습니다\n* 해당 교회의 담임목사님 성함을 입력해주세요</string>
+
+    <string name="join_name_title">이름</string>
+    <string name="join_name_info">당신의 성함을 입력해주세요</string>
+    <string name="join_name_hint">이름 입력</string>
+    <string name="join_name_bottom_info">* 평신도 세미나 참석하신 분만 이용할 수 있습니다\n* 최근에 참석하신 분이라면 전산에 등록될때까지 며칠 기다려주세요</string>
+
 
     <string name="join_email_title">이메일</string>
     <string name="join_email_info">이메일 주소를 입력해주세요.</string>
@@ -91,6 +104,8 @@
     <string name="comment_btn_loading">전송중</string>
     <string name="comment_btn_done">완료</string>
     <string name="comment_btn_error">실패</string>
+
+    <string name="back_finish">뒤로 버튼을 한번더 누르면 앱이 종료됩니다</string>
 
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 

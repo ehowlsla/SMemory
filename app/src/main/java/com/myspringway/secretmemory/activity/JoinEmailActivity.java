@@ -97,36 +97,30 @@ public class JoinEmailActivity extends Activity {
 
     @Deprecated
     private void goNextEnable() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                next.setEnabled(true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    next.setBackground(getDrawable(R.drawable.green_click));
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-                    next.setBackground(getResources().getDrawable(R.drawable.green_click));
-                } else {
-                    next.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_click));
-                }
+        runOnUiThread(() -> {
+            next.setEnabled(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                next.setBackground(getDrawable(R.drawable.green_click));
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                next.setBackground(getResources().getDrawable(R.drawable.green_click));
+            } else {
+                next.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_click));
             }
         });
     }
 
     @Deprecated
     private void goNextDisable() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                next.setEnabled(false);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    next.setBackground(getDrawable(R.color.black_20));
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-                    next.setBackground(getResources().getDrawable(R.color.black_20));
-                } else {
-                    next.setBackgroundDrawable(getResources().getDrawable(R.color.black_20));
-                }
-                email.setError("이메일 형식이 잘못되었습니다.");
+        runOnUiThread(() -> {
+            next.setEnabled(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                next.setBackground(getDrawable(R.color.black_20));
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                next.setBackground(getResources().getDrawable(R.color.black_20));
+            } else {
+                next.setBackgroundDrawable(getResources().getDrawable(R.color.black_20));
             }
+            email.setError("이메일 형식이 잘못되었습니다.");
         });
     }
 

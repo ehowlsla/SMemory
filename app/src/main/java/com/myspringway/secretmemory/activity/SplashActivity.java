@@ -42,31 +42,26 @@ public class SplashActivity extends Activity {
         String password = SharedPreferenceHelper.getValue(this, AppConstant.PASSWORD);;
         if (mAuth.getCurrentUser() != null) {
             mAuth.getCurrentUser().linkWithCredential(EmailAuthProvider.getCredential(email, password))
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                mUser = task.getResult().getUser();
-                            } else {
-                                Toast.makeText(SplashActivity.this, getResources().getString(R.string.error_sign_in_wrong_pw), Toast.LENGTH_SHORT).show();
-                            }
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            mUser = task.getResult().getUser();
                         }
+//                        else {
+//                            Toast.makeText(SplashActivity.this, getResources().getString(R.string.error_sign_in_wrong_pw), Toast.LENGTH_SHORT).show();
+//                        }
                     });
         }
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                mUser = mAuth.getCurrentUser();
-                if (mUser != null) {
-                    goRequestCardList();
-                } else {
-                    goLoginActivity();
-                }
+        mAuthListener = firebaseAuth -> {
+            mUser = mAuth.getCurrentUser();
+            if (mUser != null) {
+                goMainActivity();
+            } else {
+                goLoginActivity();
             }
         };
     }
-
+//
     @Override
     protected void onStart() {
         super.onStart();
@@ -81,26 +76,33 @@ public class SplashActivity extends Activity {
         }
     }
 
-    private void goRequestCardList() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                overridePendingTransition(0, android.R.anim.fade_in);
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                finish();
-            }
-        }, 300);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+//    3번 호출됨
+    private void goMainActivity() {
+        new Handler().postDelayed(() -> {
+            overridePendingTransition(0, android.R.anim.fade_in);
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+//            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
+        }, 1500);
     }
 
 
     private void goLoginActivity() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                overridePendingTransition(0,android.R.anim.fade_in);
-                startActivity(new Intent(SplashActivity.this, SignActivity.class));
-                finish();
-            }
-        }, 300);
+        new Handler().postDelayed(() -> {
+            overridePendingTransition(0,android.R.anim.fade_in);
+            startActivity(new Intent(SplashActivity.this, SignActivity.class));
+            finish();
+        }, 1500);
     }
 }

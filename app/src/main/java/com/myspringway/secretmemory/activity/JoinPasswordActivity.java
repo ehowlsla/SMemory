@@ -124,36 +124,33 @@ public class JoinPasswordActivity extends Activity {
 
 
     public void passwordCheck(final boolean toast) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (password.getText().toString().equals(password_re.getText().toString()) && password.getText().toString().length() >= 6) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        next.setBackground(getDrawable(R.drawable.green_click));
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-                        next.setBackground(getResources().getDrawable(R.drawable.green_click));
-                    } else {
-                        next.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_click));
-                    }
-                    next.setEnabled(true);
+        runOnUiThread(() -> {
+            if (password.getText().toString().equals(password_re.getText().toString()) && password.getText().toString().length() >= 6) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    next.setBackground(getDrawable(R.drawable.green_click));
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                    next.setBackground(getResources().getDrawable(R.drawable.green_click));
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        next.setBackground(getDrawable(R.color.black_20));
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-                        next.setBackground(getResources().getDrawable(R.color.black_20));
-                    } else {
-                        next.setBackgroundDrawable(getResources().getDrawable(R.color.black_20));
-                    }
-                    if (toast) {
-                        if (password.getText().toString().length() < PASSWORD_MIN)
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_length), Toast.LENGTH_SHORT).show();
-                        else if (password.getText().toString().matches("((?=.*\\d)(?=.*[a-z]).{6,20})"))
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_pattern), Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
-                    }
-                    next.setEnabled(false);
+                    next.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_click));
                 }
+                next.setEnabled(true);
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    next.setBackground(getDrawable(R.color.black_20));
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                    next.setBackground(getResources().getDrawable(R.color.black_20));
+                } else {
+                    next.setBackgroundDrawable(getResources().getDrawable(R.color.black_20));
+                }
+                if (toast) {
+                    if (password.getText().toString().length() < PASSWORD_MIN)
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_length), Toast.LENGTH_SHORT).show();
+                    else if (password.getText().toString().matches("((?=.*\\d)(?=.*[a-z]).{6,20})"))
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_pattern), Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
+                }
+                next.setEnabled(false);
             }
         });
     }
@@ -177,25 +174,19 @@ public class JoinPasswordActivity extends Activity {
         String pw = password.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, pw)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        stopLoading();
-                        if(task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
-                            goMainActivity();
-                            finish();
-                        } else {
-                            Log.e(TAG, "가입 실패");
-                        }
+                .addOnCompleteListener(task -> {
+                    stopLoading();
+                    if(task.isSuccessful()) {
+                        onAuthSuccess(task.getResult().getUser());
+                        goMainActivity();
+                        finish();
+                    } else {
+                        Log.e(TAG, "가입 실패");
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.getMessage());
-                        handleErrorMessage(e.getMessage().trim());
-                    }
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, e.getMessage());
+                    handleErrorMessage(e.getMessage().trim());
                 });
     }
 
@@ -219,11 +210,12 @@ public class JoinPasswordActivity extends Activity {
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        String username = user.getEmail();
-        writeNewUser(user.getUid(), username, user.getEmail());
+        writeNewUser(user.getUid(), user.getEmail());
     }
-    private void writeNewUser(String userId, String name, String email) {
-        Member member = new Member(name, email);
+    private void writeNewUser(String userId, String email) {
+        Member member = new Member(email);
+        member.name = SharedPreferenceHelper.getValue(getApplicationContext(), AppConstant.NAME);
+        member.pastor = SharedPreferenceHelper.getValue(getApplicationContext(), AppConstant.PASTOR);
         mDataRef.child("members").child(userId).setValue(member);
     }
 

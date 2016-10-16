@@ -39,8 +39,8 @@ public class SwipeDeckAdapter extends BaseAdapter {
 
     private ImageView bgImgView;
     private TextView contentText;
-    private ImageView likeImgView;
-    private TextView likeNumText;
+    private ImageView img_like;
+    private TextView tv_like;
 
     /* Constructor */
     public SwipeDeckAdapter(List<Post> data, Context context, LayoutInflater inflater) {
@@ -83,8 +83,8 @@ public class SwipeDeckAdapter extends BaseAdapter {
     private void initContent(View view) {
         bgImgView = (ImageView) view.findViewById(R.id.offer_img);
         contentText = (TextView) view.findViewById(R.id.body_text);
-        likeImgView = (ImageView) view.findViewById(R.id.like_btn);
-        likeNumText = (TextView) view.findViewById(R.id.like_num);
+        img_like = (ImageView) view.findViewById(R.id.img_like);
+        tv_like = (TextView) view.findViewById(R.id.tv_like);
     }
 
     private void bindToPost(final Post post, View view) {
@@ -108,48 +108,42 @@ public class SwipeDeckAdapter extends BaseAdapter {
 
         contentText.setText(contentData);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), CommentActivity.class);
-                i.putExtra(AppConstant.IMG_URL, imgData);
-                i.putExtra(AppConstant.TXT_CONTENT, contentData);
-                i.putExtra(AppConstant.USER_CONTENT_ID, contentKey);
-                v.getContext().startActivity(i);
-            }
+        view.setOnClickListener(v -> {
+            Intent i = new Intent(v.getContext(), CommentActivity.class);
+            i.putExtra(AppConstant.IMG_URL, imgData);
+            i.putExtra(AppConstant.TXT_CONTENT, contentData);
+            i.putExtra(AppConstant.USER_CONTENT_ID, contentKey);
+            v.getContext().startActivity(i);
         });
 
-        likeNumText.setText("" + likeData);
+        tv_like.setText("" + likeData);
 
         // TODO: Click 시 실시간 데이터 변화를 어떻게 처리할 것인지 고민해봐야 함
-        likeImgView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference();
-                dataRef.runTransaction(new Transaction.Handler() {
-                    @Override
-                    public Transaction.Result doTransaction(MutableData mutableData) {
-                        Post p = mutableData.getValue(Post.class);
-                        if (p == null) {
-                            return Transaction.success(mutableData);
-                        }
-
-                        if (p.likes.containsKey(getUid())) {
-                            p.numOfLike = --p.numOfLike;
-                            p.likes.remove(getUid());
-                        } else {
-                            p.numOfLike = ++p.numOfLike;
-                            p.likes.put(getUid(), true);
-                        }
+        tv_like.setOnClickListener(v -> {
+            DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference();
+            dataRef.runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(MutableData mutableData) {
+                    Post p = mutableData.getValue(Post.class);
+                    if (p == null) {
                         return Transaction.success(mutableData);
                     }
 
-                    @Override
-                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
+                    if (p.likes.containsKey(getUid())) {
+                        p.numOfLike = --p.numOfLike;
+                        p.likes.remove(getUid());
+                    } else {
+                        p.numOfLike = ++p.numOfLike;
+                        p.likes.put(getUid(), true);
                     }
-                });
-            }
+                    return Transaction.success(mutableData);
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                }
+            });
         });
     }
 

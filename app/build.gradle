@@ -1,6 +1,20 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'me.tatarka.retrolambda'
+
+
+configurations {
+    apt
+}
+
+apt {
+    arguments {
+        resourcePackageName android.defaultConfig.applicationId
+        androidManifestFile variant.outputs[0]?.processResources?.manifestFile
+    }
+}
+
 
 android {
     compileSdkVersion 23
@@ -19,6 +33,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -68,4 +86,25 @@ dependencies {
     compile 'org.apmem.tools:layouts:1.10@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
+
+
+    compile group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.1.0'
+    compile group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.1.0'
+    compile (group: 'com.squareup.retrofit2', name: 'adapter-rxjava', version: '2.1.0') {
+        exclude module: 'rxjava'
+    }
+
+
+    compile group: 'io.reactivex', name: 'rxjava', version: '1.2.1'
+    compile group: 'io.reactivex', name: 'rxandroid', version: '1.2.1'
+
+//    compile 'io.reactivex:rxjava:1.1.6'
+//    compile 'io.reactivex:rxandroid:1.1.6'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
+
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.7.5'
+//    compile 'com.google.android.gms:play-services-appindexing:9.2.0'0
 }

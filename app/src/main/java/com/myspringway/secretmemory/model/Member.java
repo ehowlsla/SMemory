@@ -8,15 +8,20 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Member {
 
-    public String mem_name;
-    public String mem_email;
-    public long mem_j_at; // joined at
+    public String name;
+    public String pastor;
+    public String email;
+    public long c_at;
+
+//    public String mem_name;
+//    public String mem_email;
+//    public long mem_j_at; // joined at
 
     public Member() {
         // Default constructor required for calls to DataSnapshot.getValue(Member.class)
     }
 
-    public Member(String name, String email) {
-        this.mem_email = mem_email;
+    public Member(String email) {
+        this.email = email;
     }
 }

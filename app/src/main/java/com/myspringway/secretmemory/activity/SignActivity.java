@@ -2,12 +2,14 @@ package com.myspringway.secretmemory.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.myspringway.secretmemory.R;
 import com.myspringway.secretmemory.constants.AppConstant;
@@ -38,6 +40,8 @@ public class SignActivity extends FragmentActivity {
     @BindView(R.id.indicator_default)
     CircleIndicator indicator_default;
 
+    private boolean isTwoClickBack = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,41 @@ public class SignActivity extends FragmentActivity {
         initObject();
         initActivity();
     }
+
+    @Override
+    public void onBackPressed(){
+
+        if (!isTwoClickBack) {
+            Toast.makeText(this, getResources().getString(R.string.back_finish),
+                    Toast.LENGTH_SHORT).show();
+            CntTimer timer = new CntTimer(2000, 1);
+            timer.start();
+            return;
+        } else {
+            finish();
+            return;
+        }
+    }
+
+    class CntTimer extends CountDownTimer {
+        public CntTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+            isTwoClickBack = true;
+        }
+
+        @Override
+        public void onFinish() {
+            // TODO Auto-generated method stub
+            isTwoClickBack = false;
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            // TODO Auto-generated method stub
+
+        }
+    }
+
 
     void initActivity() {
 //        registGCM();
@@ -95,7 +134,7 @@ public class SignActivity extends FragmentActivity {
     }
 
     public void goJoinActivity() {
-        Intent intent = new Intent(getApplicationContext(), JoinEmailActivity.class);
+        Intent intent = new Intent(getApplicationContext(), JoinChurchActivity.class);
         startActivity(intent);
         overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
         finish();

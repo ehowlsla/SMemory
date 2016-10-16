@@ -17,23 +17,41 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:padding="12dp"
             android:background="@color/transparent"
             android:orientation="horizontal" >
 
             <ImageView
                 android:id="@+id/menu"
-                android:background="@drawable/sel_icn_menu"
+                android:background="@drawable/menu_click"
+                android:paddingLeft="5dp"
                 android:layout_alignParentLeft="true"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <ImageView
+                android:id="@+id/search"
+                android:layout_toLeftOf="@+id/alarm"
+                android:background="@drawable/icon_search_normal"
+                android:layout_marginRight="30dp"
+                android:layout_width="24dp"
+                android:layout_height="25dp" />
 
             <ImageView
                 android:id="@+id/alarm"
-                android:background="@drawable/sel_icn_alarm"
+                android:layout_toLeftOf="@+id/sub_menu"
+                android:background="@drawable/icon_bell_normal"
+                android:layout_marginRight="30dp"
+                android:layout_width="24dp"
+                android:layout_height="25dp" />
+
+            <ImageView
+                android:id="@+id/sub_menu"
+                android:background="@drawable/icon_popupmenu_click"
                 android:layout_alignParentRight="true"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_marginRight="14dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
 
         </RelativeLayout>
     </LinearLayout>

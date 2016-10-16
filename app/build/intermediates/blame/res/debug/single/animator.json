@@ -1,42 +1,22 @@
 [
     {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/app/build/intermediates/res/merged/debug/animator/fade_out.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/app/src/main/res/animator/fade_out.xml"
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/animator/fade_out.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/animator/fade_out.xml"
     },
     {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\build\\intermediates\\res\\merged\\debug\\animator\\scale_with_alpha.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\src\\main\\res\\animator\\scale_with_alpha.xml"
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/animator/fade_in.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/animator/fade_in.xml"
     },
     {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\build\\intermediates\\res\\merged\\debug\\animator\\fade_in.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\src\\main\\res\\animator\\fade_in.xml"
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/animator/indicator_animator.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/animator/indicator_animator.xml"
     },
     {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/app/build/intermediates/res/merged/debug/animator/indicator_animator_reverse.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/app/src/main/res/animator/indicator_animator_reverse.xml"
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/animator/indicator_animator_reverse.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/animator/indicator_animator_reverse.xml"
     },
     {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\build\\intermediates\\res\\merged\\debug\\animator\\indicator_animator.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\src\\main\\res\\animator\\indicator_animator.xml"
-    },
-    {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\build\\intermediates\\res\\merged\\debug\\animator\\fade_out.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\src\\main\\res\\animator\\fade_out.xml"
-    },
-    {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/app/build/intermediates/res/merged/debug/animator/scale_with_alpha.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/app/src/main/res/animator/scale_with_alpha.xml"
-    },
-    {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\build\\intermediates\\res\\merged\\debug\\animator\\indicator_animator_reverse.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/C:\\Users\\legab\\Dropbox\\SecretMemory\\app\\src\\main\\res\\animator\\indicator_animator_reverse.xml"
-    },
-    {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/app/build/intermediates/res/merged/debug/animator/fade_in.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/app/src/main/res/animator/fade_in.xml"
-    },
-    {
-        "merged": "/Users/yoontaesup/SecretMemory/SecretMemory/app/build/intermediates/res/merged/debug/animator/indicator_animator.xml",
-        "source": "/Users/yoontaesup/SecretMemory/SecretMemory/app/src/main/res/animator/indicator_animator.xml"
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/animator/scale_with_alpha.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/animator/scale_with_alpha.xml"
     }
 ]

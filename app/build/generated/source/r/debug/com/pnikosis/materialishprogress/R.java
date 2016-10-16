@@ -21,7 +21,7 @@ public final class R {
 	}
 	public static final class string {
 		public static final int app_name = 0x7f070033;
-		public static final int default_progressbar = 0x7f07003c;
+		public static final int default_progressbar = 0x7f07003d;
 	}
 	public static final class styleable {
 		public static final int[] ProgressWheel = { 0x7f0100f5, 0x7f0100f6, 0x7f0100f7, 0x7f0100f8, 0x7f0100f9, 0x7f0100fa, 0x7f0100fb, 0x7f0100fc, 0x7f0100fd, 0x7f0100fe };

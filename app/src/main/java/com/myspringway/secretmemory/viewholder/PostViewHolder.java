@@ -16,8 +16,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
 //    public ImageView offerView;
     public TextView bodyView;
-    public ImageView likeView;
-    public TextView likeNumView;
+    public ImageView img_like;
+    public TextView tv_like;
     public ImageView comView;
     public TextView comNumView;
 
@@ -27,16 +27,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
 //        offerView = (ImageView) itemView.findViewById(R.id.offer_img);
         bodyView = (TextView) itemView.findViewById(R.id.body_text);
-        likeView = (ImageView) itemView.findViewById(R.id.like_btn);
-        likeNumView = (TextView) itemView.findViewById(R.id.like_num);
+        img_like = (ImageView) itemView.findViewById(R.id.img_like);
+        tv_like = (TextView) itemView.findViewById(R.id.tv_like);
 //        comView = (ImageView) itemView.findViewById(R.id.com_ic); // 코멘트 개수 출력용
 //        comNumView =
     }
 
     public void bindToPost(Post post, View.OnClickListener likeClickListener) {
         bodyView.setText(post.pos_content);
-        likeNumView.setText(post.numOfLike);
-
-        likeView.setOnClickListener(likeClickListener);
+        tv_like.setText(post.numOfLike);
+        img_like.setOnClickListener(likeClickListener);
     }
 }

@@ -3,6 +3,7 @@ package com.myspringway.secretmemory.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class LoginActivity extends Activity {
     @BindView(R.id.password)
     ClearableEditText password;
 
+    private boolean isTwoClickBack = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +57,43 @@ public class LoginActivity extends Activity {
         password.setText(SharedPreferenceHelper.getValue(getApplicationContext(), AppConstant.PASSWORD));
     }
 
+    @Override
+    public void onBackPressed(){
+
+        if (!isTwoClickBack) {
+            Toast.makeText(this, getResources().getString(R.string.back_finish),
+                    Toast.LENGTH_SHORT).show();
+            CntTimer timer = new CntTimer(2000, 1);
+            timer.start();
+            return;
+        } else {
+            finish();
+            return;
+        }
+    }
+
+    class CntTimer extends CountDownTimer {
+        public CntTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+            isTwoClickBack = true;
+        }
+
+        @Override
+        public void onFinish() {
+            // TODO Auto-generated method stub
+            isTwoClickBack = false;
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            // TODO Auto-generated method stub
+
+        }
+    }
+
     @OnClick(R.id.facebook_login)
     void goFacebookLogin() {
-
+        Toast.makeText(getApplicationContext(), R.string.function_no_active, Toast.LENGTH_SHORT).show();
     }
 
     void goKakaoTalkLogin() {
@@ -74,23 +111,17 @@ public class LoginActivity extends Activity {
         String password = this.password.getText().toString().trim();
 
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
-                            stopLoading();
-                            finish();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        onAuthSuccess(task.getResult().getUser());
+                        stopLoading();
+                        finish();
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        stopLoading();
-                        Log.e(TAG, e.getMessage());
-                        handleErrorMsg(e.getMessage());
-                    }
+                .addOnFailureListener(e -> {
+                    stopLoading();
+                    Log.e(TAG, e.getMessage());
+                    handleErrorMsg(e.getMessage());
                 });
     }
 
@@ -135,7 +166,7 @@ public class LoginActivity extends Activity {
     }
 
     private void writeNewUser(String userId, String name, String email) {
-        Member member = new Member(name, email);
+        Member member = new Member(email);
 
         mDataRef.child("members").child(userId).setValue(member);
     }
@@ -153,13 +184,13 @@ public class LoginActivity extends Activity {
 
     @OnClick(R.id.join)
     void goJoin() {
-        Intent intent = new Intent(this, JoinEmailActivity.class);
+        Intent intent = new Intent(this, JoinChurchActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.find)
     void goFind() {
-
+        Toast.makeText(getApplicationContext(), R.string.function_no_active, Toast.LENGTH_SHORT).show();
     }
 
     void goMainActivity() {
