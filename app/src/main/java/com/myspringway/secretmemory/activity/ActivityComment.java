@@ -40,9 +40,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CommentActivity extends AppCompatActivity {
+public class ActivityComment extends AppCompatActivity {
 
-    private static final String TAG = CommentActivity.class.getSimpleName();
+    private static final String TAG = ActivityComment.class.getSimpleName();
 
     @BindView(R.id.toolbar_bg)
     ImageView mToolbarBg;

@@ -73,6 +73,10 @@
     <string name="menu3">설정</string>
     <string name="menu4">의견 보내기</string>
 
+    <string name="send">보내기</string>
+
+    <string name="share">공유하기</string>
+
     <string name="menu1_hint">이름없는 목자들의 고백보기</string>
     <string name="menu2_hint">주님과 나만 알고있는 비밀이야기</string>
     <string name="menu3_hint">알림, 계정 및 기타 설정</string>

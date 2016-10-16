@@ -19,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.activity.CommentActivity;
 import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.model.Post;
 import com.squareup.picasso.Picasso;
