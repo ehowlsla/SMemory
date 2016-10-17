@@ -178,7 +178,8 @@ public class JoinPasswordActivity extends Activity {
                     stopLoading();
                     if(task.isSuccessful()) {
                         onAuthSuccess(task.getResult().getUser());
-                        goMainActivity();
+                        goProfileActivity();
+//                        goMainActivity();
                         finish();
                     } else {
                         Log.e(TAG, "가입 실패");
@@ -220,6 +221,15 @@ public class JoinPasswordActivity extends Activity {
     }
 
     PopupLoading popupLoading;
+
+    void goProfileActivity() {
+        SharedPreferenceHelper.setValue(getApplicationContext(), AppConstant.PASSWORD, password.getText().toString());
+
+        Intent intent = new Intent(getApplicationContext(), JoinProfileActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
+    }
 
     void goMainActivity() {
         SharedPreferenceHelper.setValue(getApplicationContext(), AppConstant.PASSWORD, password.getText().toString());

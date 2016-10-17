@@ -39,6 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityComment extends AppCompatActivity {
 
@@ -120,14 +121,25 @@ public class ActivityComment extends AppCompatActivity {
     }
 
     private static class CommentViewHolder extends RecyclerView.ViewHolder {
-        TextView authorView;
-        TextView bodyView;
+        CircleImageView profile;
+        TextView comment;
+        TextView nickname;
+
+        ImageView icon_heart;
+        TextView date;
+        TextView likecount;
 
         CommentViewHolder(View itemView) {
             super(itemView);
 
-            authorView = (TextView) itemView.findViewById(R.id.comment_author);
-            bodyView = (TextView) itemView.findViewById(R.id.comment_body);
+            profile = (CircleImageView) itemView.findViewById(R.id.profile);
+            comment = (TextView) itemView.findViewById(R.id.comment);
+            nickname = (TextView) itemView.findViewById(R.id.nickname);
+
+            icon_heart = (ImageView) itemView.findViewById(R.id.icon_heart);
+
+            date = (TextView) itemView.findViewById(R.id.date);
+            likecount = (TextView) itemView.findViewById(R.id.likecount);
         }
     }
 
@@ -219,8 +231,8 @@ public class ActivityComment extends AppCompatActivity {
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position) {
             Comment comment = mComments.get(position);
-            holder.authorView.setText(comment.com_author);
-            holder.bodyView.setText(comment.com_text);
+//            holder.authorView.setText(comment.com_author);
+//            holder.bodyView.setText(comment.com_text);
         }
 
         @Override

@@ -24,6 +24,10 @@
         "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.2.0/res/drawable/common_google_signin_btn_icon_dark.xml"
     },
     {
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/drawable/icon_heart.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/drawable/icon_heart.xml"
+    },
+    {
         "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/drawable/icon_popupmenu_click.xml",
         "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/drawable/icon_popupmenu_click.xml"
     },
@@ -236,6 +240,10 @@
         "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/drawable/abc_btn_default_mtrl_shape.xml"
     },
     {
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/drawable/round_green_btn.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/drawable/round_green_btn.xml"
+    },
+    {
         "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/drawable/abc_item_background_holo_dark.xml",
         "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/drawable/abc_item_background_holo_dark.xml"
     },
@@ -394,6 +402,10 @@
     {
         "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/drawable/abc_btn_radio_material.xml",
         "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/drawable/abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/drawable/menu_click.xml",
+        "source": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/src/main/res/drawable/menu_click.xml"
     },
     {
         "merged": "/Users/yoontaesup/AndroidStudioProjects/SMemory/app/build/intermediates/res/merged/debug/drawable/rect_error.xml",

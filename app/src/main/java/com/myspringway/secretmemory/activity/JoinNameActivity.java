@@ -3,6 +3,7 @@ package com.myspringway.secretmemory.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,12 +52,14 @@ public class JoinNameActivity extends Activity {
 
     JoinNamePresenter presenter;
 
+    Context context;
     private SoftKeyboard mSoftKeyboard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_name);
         ButterKnife.bind(this);
+        context = this;
 
         presenter = new JoinNamePresenter(this, new RestService(getApplicationContext()));
     }
@@ -154,11 +157,11 @@ public class JoinNameActivity extends Activity {
             goEamilActivity();
             return;
         } else {
-            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
             alertBuilder.setTitle(R.string.name_select);
 
             // List Adapter 생성
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.select_dialog_singlechoice);
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
             for(Name item : items) {
                 adapter.add(item.churchName + " " + item.name + "(" + item.birthDay + ")");
             }

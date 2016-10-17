@@ -76,6 +76,13 @@
             android:alpha="0.2"
             android:layout_marginLeft="1dp"
             android:background="@color/white"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:alpha="0.2"
+            android:layout_marginLeft="1dp"
+            android:background="@color/white"/>
 
     </LinearLayout>
 

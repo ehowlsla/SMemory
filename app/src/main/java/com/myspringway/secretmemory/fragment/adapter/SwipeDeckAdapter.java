@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.myspringway.secretmemory.R;
+import com.myspringway.secretmemory.activity.ActivityComment;
 import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.model.Post;
 import com.squareup.picasso.Picasso;
@@ -108,7 +109,7 @@ public class SwipeDeckAdapter extends BaseAdapter {
         contentText.setText(contentData);
 
         view.setOnClickListener(v -> {
-            Intent i = new Intent(v.getContext(), CommentActivity.class);
+            Intent i = new Intent(v.getContext(), ActivityComment.class);
             i.putExtra(AppConstant.IMG_URL, imgData);
             i.putExtra(AppConstant.TXT_CONTENT, contentData);
             i.putExtra(AppConstant.USER_CONTENT_ID, contentKey);

@@ -1,26 +1,30 @@
 package com.myspringway.secretmemory.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.myspringway.secretmemory.R;
-import com.myspringway.secretmemory.constants.AppConstant;
-import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 import com.myspringway.secretmemory.library.ClearableEditText;
 import com.myspringway.secretmemory.library.SoftKeyboard;
+import com.myspringway.secretmemory.memory.CurrentChurch;
+import com.myspringway.secretmemory.model.thirdparty.Pastor;
 import com.myspringway.secretmemory.model.thirdparty.ResPastor;
 import com.myspringway.secretmemory.presenter.JoinChurchPresenter;
 import com.myspringway.secretmemory.service.RestService;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +56,7 @@ public class JoinChurchActivity extends Activity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class JoinChurchActivity extends Activity {
 
         setContentView(R.layout.activity_join_church);
         ButterKnife.bind(this);
+        context = this;
 
         presenter = new JoinChurchPresenter(this, new RestService(getApplicationContext()));
     }
@@ -131,11 +137,47 @@ public class JoinChurchActivity extends Activity {
         if (mSoftKeyboard != null) mSoftKeyboard.unRegisterSoftKeyboardCallback();
     }
 
+    void popupPastor(List<Pastor> items) {
+        if(items == null || items.size() == 0) {
+            goNameActivity();
+            return;
+        } else {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+            alertBuilder.setTitle(R.string.name_select);
+
+            // List Adapter 생성
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
+            for(Pastor item : items) {
+                adapter.add(item.churchName + " " + item.pastor);
+//                adapter.add(item.churchName + " " + item.name + "(" + item.birthDay + ")");
+            }
+            adapter.add(getString(R.string.name_no_exist));
+
+            // 버튼 생성
+            alertBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+
+            // Adapter 셋팅
+            alertBuilder.setAdapter(adapter,
+                    (dialog, id) -> {
+                        if(id < items.size()) savePastorInfo(items.get(id));
+                        goNameActivity();
+                    });
+            alertBuilder.show();
+        }
+    }
+
+    void savePastorInfo(Pastor pastor) {
+        CurrentChurch.getInstance().pastor = pastor;
+    }
+
+    void goNameActivity() {
+        startActivity(new Intent(getApplicationContext(), JoinNameActivity.class));
+        overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
+    }
+
     public void callbackSuccess(ResPastor resPastor) {
         if (resPastor.error == 0) {
-            SharedPreferenceHelper.setValue(this, AppConstant.PASTOR, pastor.getText().toString());
-            startActivity(new Intent(getApplicationContext(), JoinNameActivity.class));
-            overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
+            popupPastor(resPastor.items);
         } else {
             Toast.makeText(getApplicationContext(), resPastor.message, Toast.LENGTH_SHORT).show();
         }

@@ -37,12 +37,16 @@
     <string name="join_pastor_title">담임목사명</string>
     <string name="join_pastor_info">담임목사님 성함을 입력해주세요</string>
     <string name="join_pastor_hint">담임목사님 성함 입력</string>
-    <string name="join_pastor_bottom_info">* 가정교회만 이용할 수 있습니다\n* 해당 교회의 담임목사님 성함을 입력해주세요</string>
+    <string name="join_pastor_bottom_info">* 이 서비스는 익명입니다\n* 가정교회가 아니면 모든 기능을 이용할 수 없습니다\n* 교회의 담임목사님 성함을 입력해주세요</string>
 
     <string name="join_name_title">이름</string>
     <string name="join_name_info">당신의 성함을 입력해주세요</string>
     <string name="join_name_hint">이름 입력</string>
-    <string name="join_name_bottom_info">* 평신도 세미나 참석하신 분만 이용할 수 있습니다\n* 최근에 참석하신 분이라면 전산에 등록될때까지 며칠 기다려주세요</string>
+    <string name="join_name_bottom_info">* 이 서비스는 익명입니다\n* 평신도 세미나 참석하신 분이 아니시면 모든 기능을 이용할 수 없습니다\n* 최근에 참석하신 분이라면 전산에 등록될때까지 며칠 기다려주세요</string>
+
+    <string name="join_profile_title">프로필</string>
+    <string name="join_profile_hint">사용하실 닉네임 입력</string>
+    <string name="join_profile_bottom_info">* 이 서비스는 익명입니다\n* 지금 등록하시는 사진과 닉네임이 노출됩니다</string>
 
 
     <string name="join_email_title">이메일</string>
@@ -97,7 +101,7 @@
 
     <string name="cancel">취소</string>
     <string name="name_select">정보를 선택해주세요</string>
-    <string name="name_no_exist">아니요. 제 정보가 없습니다</string>
+    <string name="name_no_exist">아니요. 정보가 없습니다</string>
 
     <string-array name="bg_text">
         <item>주님,\n목장 모임을 할 공간이 좁아\n침대를 버렸습니다</item>

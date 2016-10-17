@@ -8,15 +8,15 @@ package com.dd.processbutton;
 
 public final class R {
 	public static final class attr {
-		public static final int pb_colorComplete = 0x7f0100f3;
-		public static final int pb_colorError = 0x7f0100f4;
-		public static final int pb_colorNormal = 0x7f0100cf;
-		public static final int pb_colorPressed = 0x7f0100ce;
-		public static final int pb_colorProgress = 0x7f0100f2;
-		public static final int pb_cornerRadius = 0x7f0100d0;
-		public static final int pb_textComplete = 0x7f0100f0;
-		public static final int pb_textError = 0x7f0100f1;
-		public static final int pb_textProgress = 0x7f0100ef;
+		public static final int pb_colorComplete = 0x7f0100f7;
+		public static final int pb_colorError = 0x7f0100f8;
+		public static final int pb_colorNormal = 0x7f0100d3;
+		public static final int pb_colorPressed = 0x7f0100d2;
+		public static final int pb_colorProgress = 0x7f0100f6;
+		public static final int pb_cornerRadius = 0x7f0100d4;
+		public static final int pb_textComplete = 0x7f0100f4;
+		public static final int pb_textError = 0x7f0100f5;
+		public static final int pb_textProgress = 0x7f0100f3;
 	}
 	public static final class color {
 		public static final int blue_normal = 0x7f0d000f;
@@ -34,30 +34,30 @@ public final class R {
 		public static final int layer_padding = 0x7f090070;
 	}
 	public static final class drawable {
-		public static final int rect_complete = 0x7f0200b1;
-		public static final int rect_error = 0x7f0200b2;
-		public static final int rect_normal = 0x7f0200b3;
-		public static final int rect_pressed = 0x7f0200b4;
-		public static final int rect_progress = 0x7f0200b5;
+		public static final int rect_complete = 0x7f0200b3;
+		public static final int rect_error = 0x7f0200b4;
+		public static final int rect_normal = 0x7f0200b5;
+		public static final int rect_pressed = 0x7f0200b6;
+		public static final int rect_progress = 0x7f0200b7;
 	}
 	public static final class string {
-		public static final int define_processbutton = 0x7f07003f;
-		public static final int library_processbutton_author = 0x7f070071;
-		public static final int library_processbutton_authorWebsite = 0x7f070072;
-		public static final int library_processbutton_isOpenSource = 0x7f070073;
-		public static final int library_processbutton_libraryDescription = 0x7f070074;
-		public static final int library_processbutton_libraryName = 0x7f070075;
-		public static final int library_processbutton_libraryVersion = 0x7f070076;
-		public static final int library_processbutton_libraryWebsite = 0x7f070077;
-		public static final int library_processbutton_licenseId = 0x7f070078;
-		public static final int library_processbutton_repositoryLink = 0x7f070079;
+		public static final int define_processbutton = 0x7f070040;
+		public static final int library_processbutton_author = 0x7f070075;
+		public static final int library_processbutton_authorWebsite = 0x7f070076;
+		public static final int library_processbutton_isOpenSource = 0x7f070077;
+		public static final int library_processbutton_libraryDescription = 0x7f070078;
+		public static final int library_processbutton_libraryName = 0x7f070079;
+		public static final int library_processbutton_libraryVersion = 0x7f07007a;
+		public static final int library_processbutton_libraryWebsite = 0x7f07007b;
+		public static final int library_processbutton_licenseId = 0x7f07007c;
+		public static final int library_processbutton_repositoryLink = 0x7f07007d;
 	}
 	public static final class styleable {
-		public static final int[] FlatButton = { 0x7f0100ce, 0x7f0100cf, 0x7f0100d0 };
+		public static final int[] FlatButton = { 0x7f0100d2, 0x7f0100d3, 0x7f0100d4 };
 		public static final int FlatButton_pb_colorNormal = 1;
 		public static final int FlatButton_pb_colorPressed = 0;
 		public static final int FlatButton_pb_cornerRadius = 2;
-		public static final int[] ProcessButton = { 0x7f0100ef, 0x7f0100f0, 0x7f0100f1, 0x7f0100f2, 0x7f0100f3, 0x7f0100f4 };
+		public static final int[] ProcessButton = { 0x7f0100f3, 0x7f0100f4, 0x7f0100f5, 0x7f0100f6, 0x7f0100f7, 0x7f0100f8 };
 		public static final int ProcessButton_pb_colorComplete = 4;
 		public static final int ProcessButton_pb_colorError = 5;
 		public static final int ProcessButton_pb_colorProgress = 3;

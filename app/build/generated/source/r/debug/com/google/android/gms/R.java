@@ -8,12 +8,12 @@ package com.google.android.gms;
 
 public final class R {
 	public static final class attr {
-		public static final int buttonSize = 0x7f010112;
-		public static final int circleCrop = 0x7f0100e1;
-		public static final int colorScheme = 0x7f010113;
-		public static final int imageAspectRatio = 0x7f0100e0;
-		public static final int imageAspectRatioAdjust = 0x7f0100df;
-		public static final int scopeUris = 0x7f010114;
+		public static final int buttonSize = 0x7f010116;
+		public static final int circleCrop = 0x7f0100e5;
+		public static final int colorScheme = 0x7f010117;
+		public static final int imageAspectRatio = 0x7f0100e4;
+		public static final int imageAspectRatioAdjust = 0x7f0100e3;
+		public static final int scopeUris = 0x7f010118;
 	}
 	public static final class color {
 		public static final int common_google_signin_btn_text_dark = 0x7f0d0081;
@@ -96,8 +96,8 @@ public final class R {
 		public static final int normal = 0x7f0e000d;
 		public static final int radio = 0x7f0e0061;
 		public static final int standard = 0x7f0e003e;
-		public static final int text = 0x7f0e00d5;
-		public static final int text2 = 0x7f0e00d3;
+		public static final int text = 0x7f0e00d9;
+		public static final int text2 = 0x7f0e00d7;
 		public static final int wide = 0x7f0e003f;
 		public static final int wrap_content = 0x7f0e001b;
 	}
@@ -144,11 +144,11 @@ public final class R {
 	public static final class style {
 	}
 	public static final class styleable {
-		public static final int[] LoadingImageView = { 0x7f0100df, 0x7f0100e0, 0x7f0100e1 };
+		public static final int[] LoadingImageView = { 0x7f0100e3, 0x7f0100e4, 0x7f0100e5 };
 		public static final int LoadingImageView_circleCrop = 2;
 		public static final int LoadingImageView_imageAspectRatio = 1;
 		public static final int LoadingImageView_imageAspectRatioAdjust = 0;
-		public static final int[] SignInButton = { 0x7f010112, 0x7f010113, 0x7f010114 };
+		public static final int[] SignInButton = { 0x7f010116, 0x7f010117, 0x7f010118 };
 		public static final int SignInButton_buttonSize = 0;
 		public static final int SignInButton_colorScheme = 1;
 		public static final int SignInButton_scopeUris = 2;

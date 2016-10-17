@@ -284,22 +284,16 @@ public class WriteActivity extends Activity {
                 .child(fileUri.getLastPathSegment());
 
         photoRef.putFile(fileUri)
-                .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        if (taskSnapshot.getMetadata() != null) {
-                            mDownloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                        }
-                        isImageUpload = true;
-                        save.setEnabled(true);
+                .addOnSuccessListener(this, taskSnapshot -> {
+                    if (taskSnapshot.getMetadata() != null) {
+                        mDownloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
                     }
+                    isImageUpload = true;
+                    save.setEnabled(true);
                 })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mDownloadUrl = null;
-                        Toast.makeText(WriteActivity.this, getResources().getString(R.string.error_img_upload_fail), Toast.LENGTH_SHORT).show();
-                    }
+                .addOnFailureListener(this, e -> {
+                    mDownloadUrl = null;
+                    Toast.makeText(WriteActivity.this, getResources().getString(R.string.error_img_upload_fail), Toast.LENGTH_SHORT).show();
                 });
 
     }
