@@ -1,12 +1,14 @@
 package com.myspringway.secretmemory.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,11 +18,15 @@ import com.myspringway.secretmemory.constants.AppConstant;
 import com.myspringway.secretmemory.helper.SharedPreferenceHelper;
 import com.myspringway.secretmemory.library.ClearableEditText;
 import com.myspringway.secretmemory.library.SoftKeyboard;
+import com.myspringway.secretmemory.memory.CurrentName;
+import com.myspringway.secretmemory.model.thirdparty.Name;
 import com.myspringway.secretmemory.model.thirdparty.ResName;
 import com.myspringway.secretmemory.model.thirdparty.ResPastor;
 import com.myspringway.secretmemory.presenter.JoinChurchPresenter;
 import com.myspringway.secretmemory.presenter.JoinNamePresenter;
 import com.myspringway.secretmemory.service.RestService;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -127,11 +133,47 @@ public class JoinNameActivity extends Activity {
 
     public void callbackSuccess(ResName resName) {
         if (resName.error == 0) {
-            SharedPreferenceHelper.setValue(this, AppConstant.NAME, name.getText().toString());
-            startActivity(new Intent(getApplicationContext(), JoinEmailActivity.class));
-            overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
+            popupName(resName.items);
         } else {
-            Toast.makeText(getApplicationContext(), resName.message, Toast.LENGTH_SHORT).show();
+            goEamilActivity();
+        }
+    }
+
+    void goEamilActivity() {
+        SharedPreferenceHelper.setValue(this, AppConstant.NAME, name.getText().toString());
+        startActivity(new Intent(getApplicationContext(), JoinEmailActivity.class));
+        overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
+    }
+
+    void saveNameInfo(Name name) {
+        CurrentName.getInstance().name = name;
+    }
+
+    void popupName(List<Name> items) {
+        if(items == null || items.size() == 0) {
+            goEamilActivity();
+            return;
+        } else {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getApplicationContext());
+            alertBuilder.setTitle(R.string.name_select);
+
+            // List Adapter 생성
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.select_dialog_singlechoice);
+            for(Name item : items) {
+                adapter.add(item.churchName + " " + item.name + "(" + item.birthDay + ")");
+            }
+            adapter.add(getString(R.string.name_no_exist));
+
+            // 버튼 생성
+            alertBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+
+            // Adapter 셋팅
+            alertBuilder.setAdapter(adapter,
+                    (dialog, id) -> {
+                        if(id < items.size()) saveNameInfo(items.get(id));
+                        goEamilActivity();
+                    });
+            alertBuilder.show();
         }
     }
 }

@@ -47,6 +47,7 @@
                 android:shadowRadius="1.0"
                 android:gravity="center"
                 android:textSize="@dimen/text_content_size"
+                android:lines="7"
                 />
             <RelativeLayout
                 android:layout_width="match_parent"
